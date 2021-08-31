@@ -32,9 +32,24 @@ url = 'https://myself-bbs.com/portal.php'
 oldDate = data()
 print('\n'.join(map(str, oldDate)))  # 打印出換行的列表
 while(True):
-    time.sleep(300)
-    newDate = data()
-    if newDate != oldDate:
-        print(list(set(newDate) ^ set(oldDate)))  # 比較打印出不同的新翻 ^不同 &相同
-        break
-    print('這5分鐘沒有更新')
+    while(True):
+        time.sleep(300)
+        newDate = data()
+        if newDate != oldDate:
+            # 比較打印出不同的新翻 ^不同 &相同
+            Compared = (list(set(newDate) ^ set(oldDate)))
+            Compared.insert(1, '')
+            newUpdate = ('\n'.join(map(str, Compared)))
+            del(newUpdate[0])  # 移除列表第一個選項
+            #kzuaIP這串是Line的token
+            headers = {
+                "Authorization": "Bearer " + "KZuA1PCElIXss7soRvLTTr4Y3m5GSXjSyjye0gSMhFv",
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+            params = {"message": newUpdate}
+            r = requests.post("https://notify-api.line.me/api/notify",
+                              headers=headers, params=params)
+            print(r.status_code)  # 200
+            oldDate = data()
+            break
+        print('這5分鐘沒有更新')
