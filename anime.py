@@ -45,7 +45,7 @@ message = ('\n'.join(map(str, oldDate)))  # 打印出換行的列表
 sendmessage(message)
 while(True):
     while(True):
-        time.sleep(8)
+        time.sleep(300)
         newDate = data()
         if newDate != oldDate:
             # 比較打印出不同的新翻 ^不同 &相同
