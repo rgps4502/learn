@@ -54,6 +54,6 @@ while(True):
             Compared.pop(1)  # 移除列表最後一個選項
             message = ('\n'.join(map(str, Compared)))
             sendmessage(message)
-            oldDate = data()
+            oldDate = newDate
             break
         print('這5分鐘沒有更新')
