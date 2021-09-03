@@ -12,6 +12,7 @@ def get_http(url):
         r.encoding = r.apparent_encoding  # 用預測的解碼是正確的
         return r.text  # 顯示網頁內容
     except:
+        print('連線失敗')
         return "發生異常"
 
 
@@ -56,4 +57,4 @@ while(True):
             sendmessage(message)
             oldDate = newDate
             break
-        print('這5分鐘沒有更新')
+        # print('這5分鐘沒有更新')
