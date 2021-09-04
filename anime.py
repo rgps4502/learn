@@ -1,3 +1,4 @@
+* -*- 
 from typing import NewType, Text
 import requests
 import time
