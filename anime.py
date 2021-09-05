@@ -39,9 +39,8 @@ def sendmessage(message):
     r = requests.post("https://notify-api.line.me/api/notify",
                       headers=headers, params=params)
     print(r.status_code)  # 200
-
-
-url = 'https://myself-bbs.com/portal.php'
+    
+    url = 'https://myself-bbs.com/portal.php'
 oldDate = data()
 all_list = oldDate
 message = ('\n'.join(map(str, oldDate)))  # 打印出換行的列表
@@ -51,15 +50,12 @@ while(True):
         time.sleep(300)
         newDate = data()
         if newDate != oldDate:
-            # 比較打印出不同的新翻 ^不同 &相同
-            Compared = (list(set(newDate) ^ set(oldDate)))
-            Compared.insert(0, '')
-            repeat = (list(set(Compared) & set(all_list)))  # 比較種表找出重複的
-            Compared.remove(repeat)  # 移除重複的列表
-            all_list.insert(1, Compared)  # 把新的插入總表做後續比較用
+            Compareddf=[y for y in (oldDate+newDate) if y not in all_list] #比較打印出在總表list不相同的
+            Compareddf.insert(0, '')
+            all_list.insert(1, Compareddf)  # 把新的插入總表做後續比較用
             all_list.pop()  # 移除總表的最後一個保持15個
-            message = ('\n'.join(map(str, Compared)))
+            message = ('\n'.join(map(str, Compareddf)))
             sendmessage(message)
             oldDate = newDate
             break
-        # print('這5分鐘沒有更新')
+        # print('這5分鐘沒有更新'
