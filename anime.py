@@ -52,8 +52,8 @@ while(True):
             Compareddf=[y for y in (oldDate+newDate) if y not in all_list] #比較打印出在總表list不相同的
             for newan in Compareddf:
                 all_list.insert(1, newan)  # 把新的插入總表做後續比較用
+                all_list.pop()  # 移除總表的最後一個保持15個
             Compareddf.insert(0, '')
-            all_list.pop()  # 移除總表的最後一個保持15個
             message = ('\n'.join(map(str, Compareddf)))
             sendmessage(message)
             oldDate = newDate
