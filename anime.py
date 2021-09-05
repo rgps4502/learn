@@ -42,6 +42,7 @@ def sendmessage(message):
 
 url = 'https://myself-bbs.com/portal.php'
 oldDate = data()
+all_list = oldDate
 message = ('\n'.join(map(str, oldDate)))  # 打印出換行的列表
 sendmessage(message)
 while(True):
@@ -52,7 +53,10 @@ while(True):
             # 比較打印出不同的新翻 ^不同 &相同
             Compared = (list(set(newDate) ^ set(oldDate)))
             Compared.insert(0, '')
-            Compared.pop(1)  # 移除列表最後一個選項
+            repeat = (list(set(Compared) & set(all_list)))  # 比較種表找出重複的
+            Compared.remove(repeat)  # 移除重複的列表
+            all_list.insert(1, Compared)  # 把新的插入總表做後續比較用
+            all_list.pop()  # 移除總表的最後一個保持15個
             message = ('\n'.join(map(str, Compared)))
             sendmessage(message)
             oldDate = newDate
