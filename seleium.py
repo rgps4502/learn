@@ -17,6 +17,7 @@ browser = webdriver.Remote(
     options=options,
     desired_capabilities=DesiredCapabilities.CHROME,
 )
+#browser = webdriver.Chrome(options = options)
 
 
 def sendmessage(message):
