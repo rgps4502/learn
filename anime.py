@@ -15,27 +15,7 @@ def get_http(url):
     except:
         print('1.連線失敗一分後重新嘗試')
         time.sleep(60)
-        session = requests.session()
-        r = session.get(url, timeout=30)  # 獲取網頁30秒為限
-        r.raise_for_status()  # 如果狀態不是200引發HTTPERROR異常
-        r.encoding = r.apparent_encoding  # 用預測的解碼是正確的
-        return r.text  # 顯示網頁內容
-    except:
-        print('2.連線失敗一分後重新嘗試')
-        time.sleep(60)
-        session = requests.session()
-        r = session.get(url, timeout=30)  # 獲取網頁30秒為限
-        r.raise_for_status()  # 如果狀態不是200引發HTTPERROR異常
-        r.encoding = r.apparent_encoding  # 用預測的解碼是正確的
-        return r.text  # 顯示網頁內容
-    except:
-        print('3.連線失敗一分後重新嘗試')
-        time.sleep(60)
-        session = requests.session()
-        r = session.get(url, timeout=30)  # 獲取網頁30秒為限
-        r.raise_for_status()  # 如果狀態不是200引發HTTPERROR異常
-        r.encoding = r.apparent_encoding  # 用預測的解碼是正確的
-        return r.text  # 顯示網頁內容
+        return get_http(url)  # 顯示網頁內容
 
 
 def data():
