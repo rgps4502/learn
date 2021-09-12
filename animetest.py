@@ -32,14 +32,14 @@ def data():
     return item
 
 
-def sendmessage(message):
+def sendmessage(message, nowTime):
     headers = {
         "Authorization": "Bearer " + "KZuA1PCElIXss7soRvLTTr4Y3m5GSXjSyjye0gSMhFv",
         "Content-Type": "application/x-www-form-urlencoded"}
     params = {"message": message}
     r = requests.post("https://notify-api.line.me/api/notify",
                       headers=headers, params=params)
-    print(r.status_code)  # 200
+    print(str(r.status_code) + '   ' + nowTime)  # 200
 
 
 url = 'https://myself-bbs.com/portal.php'
@@ -47,6 +47,8 @@ nowTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 oldDate = openr('/root/learn/oldDate.txt')  # oldDate = data()
 all_lists = openr('/root/learn/all_list.txt')  # 取all_list
 newDate = data()
+newDate.insert(1, '你不再的街')
+newDate.pop()
 if newDate != oldDate:
     # 比較打印出在總表list不相同的
     Compareddf = [y for y in (oldDate + newDate) if y not in all_lists]
@@ -56,7 +58,7 @@ if newDate != oldDate:
     #Compareddf.insert(0, '')
     message = ('\n'.join(map(str, Compareddf)))
     all_list = ('\n'.join(map(str, all_lists)))
-    sendmessage(message)
+    sendmessage(message, nowTime)
     datemessage = ('\n'.join(map(str, newDate)))
     openw('/root/learn/all_list.txt', all_list)
     openw("/root/learn/oldDate.txt", datemessage)  # 新date寫入舊的下次比對用
