@@ -42,17 +42,15 @@ def sendmessage(message):
 
 
 def writef(txtname, listname):
-    f = open(txtname, 'w')
+    f = open(txtname, 'w', encoding='utf-8')
     f.write(str(listname))
     f.close
 
 
 url = 'https://myself-bbs.com/portal.php'
 all_list = data()
-f = open('all_list.txt', 'w')
-f.write(str(data()))
-f.close
-
+all_list1 = ('\n'.join(map(str, all_list)))
+writef('all_list.txt', all_list1)
 
 newDate1 = all_list
 newDate = ('\n'.join(map(str, newDate1)))
