@@ -7,7 +7,7 @@ contabl使用
 獲取總表all_list.txt跟oldata.txt
 
 crontab設定
-*/5 * * * * python3 /root/learn/animetest.py >> /root/learn/log.txt
+*/5 * * * * python3 /root/learn/anime/animetest.py >> /root/learn/anime/log.txt
 
 有問題查看log
 
