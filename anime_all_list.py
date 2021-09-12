@@ -53,6 +53,7 @@ f = open('all_list.txt', 'w')
 f.write(str(data()))
 f.close
 
+
 newDate1 = all_list
 newDate = ('\n'.join(map(str, newDate1)))
 writef('oldDate.txt', newDate)

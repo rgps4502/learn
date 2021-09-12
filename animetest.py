@@ -39,12 +39,13 @@ def sendmessage(message):
     params = {"message": message}
     r = requests.post("https://notify-api.line.me/api/notify",
                       headers=headers, params=params)
-    print(r.status_code)  # 200
+    print(r.status_code + nowTime)  # 200
 
 
 url = 'https://myself-bbs.com/portal.php'
-oldDate = openr('oldDate.txt')  # oldDate = data()
-all_list = oldDate
+nowTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+oldDate = openr('/root/learn/oldDate.txt')  # oldDate = data()
+all_list = openr('/root/learn/all_list.txt')  # 取all_list
 nowmessage = ('\n'.join(map(str, oldDate)))  # 打印出換行的列表
 # sendmessage(nowmessage)
 newDate = data()
@@ -58,6 +59,7 @@ if newDate != oldDate:
     #Compareddf.insert(0, '')
     message = ('\n'.join(map(str, Compareddf)))
     datemessage = ('\n'.join(map(str, newDate)))
-    # sendmessage(message)
-    oldDate = openw("oldDate.txt", datemessage)  # 新date寫入舊的下次比對用
-print("這五分鐘沒有更新")
+    sendmessage(message)
+    openw('/root/learn/all_list.txt', str(all_list))
+    openw("/root/learn/oldDate.txt", datemessage)  # 新date寫入舊的下次比對用
+#print("無更新" + nowTime)
