@@ -15,7 +15,7 @@ def get_http(url):
         return r.text  # 顯示網頁內容
     except:
         print('連線失敗')
-        return "發生異常"
+        return get_http(url)
 
 
 def data():
@@ -39,27 +39,25 @@ def sendmessage(message):
     params = {"message": message}
     r = requests.post("https://notify-api.line.me/api/notify",
                       headers=headers, params=params)
-    print(r.status_code + nowTime)  # 200
+    print(r.status_code)  # 200
 
 
 url = 'https://myself-bbs.com/portal.php'
 nowTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 oldDate = openr('/root/learn/oldDate.txt')  # oldDate = data()
-all_list = openr('/root/learn/all_list.txt')  # 取all_list
-nowmessage = ('\n'.join(map(str, oldDate)))  # 打印出換行的列表
-# sendmessage(nowmessage)
+all_lists = openr('/root/learn/all_list.txt')  # 取all_list
 newDate = data()
-
 if newDate != oldDate:
     # 比較打印出在總表list不相同的
-    Compareddf = [y for y in (oldDate+newDate) if y not in all_list]
+    Compareddf = [y for y in (oldDate + newDate) if y not in all_lists]
     for newan in Compareddf:
-        all_list.insert(1, newan)  # 把新的插入總表做後續比較用
-        all_list.pop()  # 移除總表的最後一個保持15個
+        all_lists.insert(1, newan)  # 把新的插入總表做後續比較用
+        all_lists.pop()  # 移除總表的最後一個保持15個
     #Compareddf.insert(0, '')
     message = ('\n'.join(map(str, Compareddf)))
-    datemessage = ('\n'.join(map(str, newDate)))
+    all_list = ('\n'.join(map(str, all_lists)))
     sendmessage(message)
-    openw('/root/learn/all_list.txt', str(all_list))
+    datemessage = ('\n'.join(map(str, newDate)))
+    openw('/root/learn/all_list.txt', all_list)
     openw("/root/learn/oldDate.txt", datemessage)  # 新date寫入舊的下次比對用
-#print("無更新" + nowTime)
+# print(message)
