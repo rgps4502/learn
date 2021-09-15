@@ -10,10 +10,37 @@ ex : scrapy startproject anime
 
 系統會創建
 scrapy.cfg: 项目的配置文件
-tutorial/: 该项目的python模块。之后您将在此加入代码。
-tutorial/items.py: 项目中的item文件.
-tutorial/pipelines.py: 项目中的pipelines文件.
-tutorial/settings.py: 项目的设置文件.
-tutorial/spiders/: 放置spider代码的目录.
+anime/: 该项目的python模块。之后您将在此加入代码。
+anime/items.py: 项目中的item文件.
+anime/pipelines.py: 项目中的pipelines文件.
+anime/settings.py: 项目的设置文件.
+anime/spiders/: 放置spider代码的目录.
 
-第一步定義items
+第一步定義items 清單欄位的名稱
+ex :
+    class AnimeItem(scrapy.Item):   class可自行取名稱
+    title = scrapy.Field()       #title就是欄位的名稱
+    time = scrapy.Field()        #time就是欄位的名稱
+
+第二步創建spider  用yield返回給Item做處理
+from typing import Text
+import bs4
+import scrapy
+from bs4 import BeautifulSoup
+from anime.items import AnimeItem
+
+class AnumeUpdate(scrapy.Spider):
+    name = 'anime'
+    start_urls = ['https://myself-bbs.com/portal.php']
+
+    def parse(self, response):
+        soup = BeautifulSoup(response.body)
+        for alls in soup.select('#portal_block_951_content p'):
+            animeItem = AnimeItem()
+            animeItem['title'] = alls.text
+            # print(alls.text)
+            yield animeItem
+
+第三步嘗試運行
+scrapy crawl anime  一般運行程是
+scrapy crawl anime -o anime.json -t json  運作輸出成json格式

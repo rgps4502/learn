@@ -11,10 +11,6 @@ import scrapy
 #     # name = scrapy.Field()
 #     pass
 
-import scrapy
 
-
-class DmozItem(scrapy.Item):
+class AnimeItem(scrapy.Item):
     title = scrapy.Field()
-    link = scrapy.Field()
-    desc = scrapy.Field()
