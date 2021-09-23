@@ -4,6 +4,7 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+from scrapy.item import Field
 
 
 # class AnimeItem(scrapy.Item):
@@ -13,4 +14,10 @@ import scrapy
 
 
 class AnimeItem(scrapy.Item):
+    title = scrapy.Field()
+
+
+class Anime1Item(scrapy.Item):
+    id = scrapy.Field()
+    url = scrapy.Field()
     title = scrapy.Field()

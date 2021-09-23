@@ -5,8 +5,12 @@ pip3 install cryptography
 pip3 install scrapy
 
 創建項目
-scrapy startproject 項目名稱
+scrapy startproject 專案名稱
 ex : scrapy startproject anime
+
+创建一个新的spider
+scrapy genspider 名稱 要爬的URL
+ex : scrapy genspider mydomain mydomain.com
 
 系統會創建
 scrapy.cfg: 项目的配置文件
@@ -44,3 +48,11 @@ class AnumeUpdate(scrapy.Spider):
 第三步嘗試運行
 scrapy crawl anime  一般運行程是
 scrapy crawl anime -o anime.json -t json  運作輸出成json格式
+
+
+
+shoot
+使用過程中會遇到cloudflare跳轉問題
+如何在Scrapy中绕过cloudflare bot/ddos
+需要安裝並配入腳本中
+pip3 install cfscrape
