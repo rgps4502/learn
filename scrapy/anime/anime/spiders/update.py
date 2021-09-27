@@ -1,11 +1,10 @@
 from typing import Text
-import bs4
 import scrapy
 from bs4 import BeautifulSoup
 from anime.items import AnimeItem
 
 
-class AnumeUpdate(scrapy.Spider):
+class AnimeUpdate(scrapy.Spider):
     name = 'anime'
     start_urls = ['https://myself-bbs.com/portal.php']
 
