@@ -8,16 +8,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 import time
 import requests
+from bs4 import BeautifulSoup
 
 options = webdriver.ChromeOptions()
 options.add_argument('--log-level=3')  # 不添加會有奇怪抱錯
 browser = webdriver.Chrome(chrome_options=options)
-browser.implicitly_wait(10)
-browser.get("https://www.google.com")
-inputElement = browser.find_element_by_name("q")
-inputElement.send_keys("Selenium")
-inputElement.submit()
-find = '//*[@id="lo-post-page-navbar-sign-in-button"]/div/span/button'
+browser.implicitly_wait(3)
+url = "https://cheapsslsecurity.com/quicklogin.html?isauth=false&ReturnUrl=%2fclient%2forderdtl.html%3forderdetailid%3d443556%26isdownload%3dtrue&orderdetailid=443557&isdownload=true"
+browser.get(url)
+
 
 # try:
 #     element = WebDriverWait(browser, 60).until(
@@ -27,12 +26,15 @@ find = '//*[@id="lo-post-page-navbar-sign-in-button"]/div/span/button'
 #     print('沒找到')
 
 try:
-    element = browser.find_element_by_xpath(find)
-    element.click()
-except:
-    browser.refresh()
-    browser.find_element_by_class_name('LC20lb').click()
-    element = browser.find_element_by_xpath(find)
-    element.click()
-else:
-    print(browser.title)
+    browser.find_element_by_name(
+        "ctl00$RapidSSLContent$txtUsername").send_keys("moon.cake988@gmail.com")
+    time.sleep(1)
+    browser.find_element_by_id("txtPassword").send_keys(
+        "r9DgQ7HEKezbpct")
+    time.sleep(1)
+    browser.find_element_by_xpath('//*[(@id = "btnLogin")]').click()
+
+
+finally:
+    txt = browser.page_source
+    # browser.quit()

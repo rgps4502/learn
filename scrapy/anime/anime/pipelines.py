@@ -10,6 +10,8 @@ import json
 import codecs
 from itemadapter import adapter
 from itemadapter.adapter import ItemAdapter
+from requests.api import request
+from requests.models import Response
 from scrapy.exceptions import DropItem
 from scrapy.http.request import Request
 
@@ -23,6 +25,7 @@ class AnimePipeline:
         #     return item
         # else:
         #     raise DropItem('丟棄')
+        # open('D:/下載/123.zip', 'wb').write(item.content)
 
         return item
 
@@ -30,13 +33,17 @@ class AnimePipeline:
 class JsonWriterPipeline:
 
     def open_spider(self, spider):
-        self.file = codecs.open('list.json', 'wb', encoding='utf-8')
+        self.file = codecs.open('123.zip', 'wb', encoding='utf-8')
 
     def close_spider(self, spider):
         self.file.close()
 
     def process_item(self, item, spider):
         # if spider.name == 'anime':
-        line = json.dumps(dict(item), ensure_ascii=False) + '\n'
-        self.file.write(line)
+        # line = json.dumps(dict(item), ensure_ascii=False) + '\n'
+        order = '443557'
+        file_url = "https://cheapsslsecurity.com/client/orderdtl.html?orderdetailid=" + \
+            order+"&isdownload=true"
+        myfile = request.get(file_url, Response.cookies)
+        self.file.write(myfile.content)
         return item

@@ -37,11 +37,15 @@ class CheapssSpider(scrapy.Spider):
         cookie = {
             'cookie': '.ASPXANONYMOUS=lvsRivHp1wEkAAAAZTYwYjcyMzEtNjAxMy00N2ViLTg4ZDctNDQ3Mjc2ZWIyMDY0BgeNDgYXPymARB6UQHxj7spFIXJsv9lXRLCmwHnfnkA1; ASP.NET_SessionId=vqqkeefk3zbxpco2zvdagxxw; _ga=GA1.2.1096757397.1632720174; _gid=GA1.2.1611250389.1632720174; _gcl_au=1.1.504918032.1632720174; BlockPop=true; _hjid=f2d223e8-34e2-4fb3-a03c-1ce6eca81dbd; _hjFirstSeen=1; _hjAbsoluteSessionInProgress=0; _hjIncludedInPageviewSample=1; _gali=btnLogin'
         }
-        yield scrapy.FormRequest.from_response(response, formdata=payload, meta={'cookie': cookie}, callback=self.after_login)
+
+        yield scrapy.FormRequest.from_response(response, formdata=payload, callback=self.after_login)
 
     def after_login(self, response):
         soup = BeautifulSoup(response.body, "lxml")
         print(soup.title)
-        file_url = "https://cheapsslsecurity.com/quicklogin.html?isauth=false&ReturnUrl=%2fclient%2forderdtl.html%3forderdetailid%3d443556%26isdownload%3dtrue&orderdetailid=443557&isdownload=true"
-        file = requests.get(file_url, allow_redirects=True)
-        open('D:/下載/123.zip', 'wb').write(file.content)
+
+        file_url = "https://cheapsslsecurity.com/quicklogin.html?isauth=false&5ReturnUrl=%2fclient%2forderdtl.html%3forderdetailid%3d443556%26isdownload%3dtrue&orderdetailid=443557&isdownload=true"
+
+        # file = requests.get(file_url, formdata=payload, meta={
+        #                     'cookie': cookie}, allow_redirects=True)
+        # open('D:/下載/123.zip', 'wb').write(file.content)

@@ -67,7 +67,7 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'anime.pipelines.AnimePipeline': 300,
-    # 'anime.pipelines.JsonWriterPipeline': 800,
+    'anime.pipelines.JsonWriterPipeline': 800,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -92,6 +92,5 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 HTTPERROR_ALLOWED_CODES = [403]
 
-# selenium 配置
-# SELENIUM_TIMEOUT = 25
-# LOAD_IMAGE =
+# 檔案下載位置 配置
+FILES_STORE = 'D:/下載/'
