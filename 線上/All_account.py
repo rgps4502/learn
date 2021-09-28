@@ -2,8 +2,8 @@
 
 
 def cheapss():
-    user = 'moon.cake988@gmail.com'
-    password = 'r9DgQ7HEKezbpct'
+    user = ''
+    password = ''
     return user, password
 
 
