@@ -1,0 +1,5 @@
+cheapss_download.py
+下載商業證書
+確保order ID能夠獲取到腳本才可正常運作
+
+帳號更改在All_account.py裡面有需更改請改這
