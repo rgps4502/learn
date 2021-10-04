@@ -1,0 +1,4 @@
+       'hdnLoginClick': "__doPostBack('lnkButton','')",
+        'hdnPlaceOrderClick': "__doPostBack('lnkPlaceOrder','')",
+        'hdnlnkUpdateCart': "__doPostBack('lnkUpdateCart','')",
+        'hdnRefereshClick': __doPostBack('lnkReferesh',''),
