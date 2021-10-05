@@ -7,5 +7,5 @@ df = pd.read_excel(MKT, sheet_name='MKT1')
 
 for i in df['产品']:
     if i == 'A02':
-        df.to_excel(i+'.xlsx', sheet_name=i)
+        df.loc[df['产品'] == 'A02'].to_excel(i+'.xlsx', sheet_name=i)
         # print(df.loc[df['产品'] == 'A02'])
