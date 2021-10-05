@@ -1,11 +1,11 @@
 # * -*- coding: utf-8 -*-
-import xlrd
-import xlwt
+import pandas as pd
+MKT = 'MKT1.xlsx'
+A02 = 'A02.xlsx'
 
-file = 'MKT1.xlsx'
-xlsx = xlrd.open_workbook(file)
-table = xlsx.sheets()[0]  # 打開第一張表
-nrows = table.nrows
-for i in range(nrows):
-    print(table.row_values(i)[:7])
-# print(nrow)
+df = pd.read_excel(MKT, sheet_name='MKT1')
+
+for i in df['产品']:
+    if i == 'A02':
+        df.to_excel(i+'.xlsx', sheet_name=i)
+        # print(df.loc[df['产品'] == 'A02'])
