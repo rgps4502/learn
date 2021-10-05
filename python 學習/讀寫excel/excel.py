@@ -9,3 +9,5 @@ for i in df['产品']:
     if i == 'A02':
         df.loc[df['产品'] == 'A02'].to_excel(i+'.xlsx', sheet_name=i)
         # print(df.loc[df['产品'] == 'A02'])
+
+# 參考網址 https://blog.csdn.net/weixin_43245453/article/details/90747259
