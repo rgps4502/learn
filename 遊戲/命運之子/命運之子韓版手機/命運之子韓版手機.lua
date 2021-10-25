@@ -161,6 +161,7 @@ function food() --練肥
       choose:existsClick("choose.png",1)
       choose_confirm:existsClick("choose_confirm.png",1)
       choose_ok:existsClick("choose_ok.png",1)
+      sleep(3)
       agate_exit:existsClick("agate_exit.png",10)
       exit:existsClick("exit.png",1)
       sleep(1)
