@@ -18,7 +18,7 @@ pvp_over = Region(160, 878, 410, 40)  	--pvp結束
 pvp_over1 = Region(85, 874, 610, 40)  	--pvp獎勵
 pvp_over_2 = Region(328, 716, 100, 80)  	--pvp獎勵滿通知
 reward = Region(560, 509, 120, 80)  	--pvp獎勵領取
-reward1 = Region(185, 500, 308, 50)  	--pvp獎勵通知
+reward1 = Region(167, 562, 400, 65)  	--pvp獎勵通知
 reward_confirm = Region(460, 866, 120, 80)  	--pvp獎勵領取
 reward_OK =  Region(320, 800, 120, 80)  	--pvp獎勵確認
 ----------------------------------------↑pvp
@@ -31,7 +31,7 @@ fight_config = Region(560, 250, 200, 100) --設定輪迴條件
 fight_confirm = Region(315, 1125, 200, 100) --輪迴條件確認
 fight_start = Region(570, 440, 200, 100) --開始戰鬥
 food_full = Region(85, 947, 600, 40) --腳色滿
-agate = Region(496, 901, 200, 120) --點擊獎盃
+agate = Region(516, 917, 100, 50) --點擊獎盃
 agate_point = Region(592, 984, 150, 80) --點選叫出瑪瑙按鈕
 agate_2 = Region(264, 1156, 180, 80) --進入瑪瑙
 choose = Region(568, 549, 80, 80) --選擇換成瑪瑙的腳色
@@ -212,13 +212,11 @@ function food20_max20()   --當肥料20等換肥
 end
 
 -- =使用者自訂=========
-dialogInit()
-addCheckBox('pvp_fight','pvp',false)  --是否打PVP
-addCheckBox('feed_food','練肥',false)  --是否打練肥
-addCheckBox('friend','朋友決鬥',false)  --是否打好友
-dialogShowFullScreen("關卡設定")
-
-
+-- dialogInit()
+-- addCheckBox('pvp_fight','pvp',false)  --是否打PVP
+-- addCheckBox('feed_food','練肥',false)  --是否打練肥
+-- addCheckBox('friend','朋友決鬥',false)  --是否打好友
+-- dialogShowFullScreen("關卡設定")
 
 -- while (true) do
 -- 打PVP
@@ -226,11 +224,15 @@ if pvp_fight == true then
   pvp()
 end
 --練肥
+feed_food = true
 if feed_food == true then
-  food()
+  agate:highlight()
+  agate:existsClick("agate.png",2)
+  -- agate_2:existsClick("agate_2.png",1)
+  -- food()
 end
 --打好友
 if friend == true then
-  friend_PVP()
+  -- friend_PVP()
 end
 -- end
