@@ -33,6 +33,3 @@ session = requests.session()
 soup = req(session, url, header)
 VIEWSTATE = soup.find(id='__VIEWSTATE')['value']
 EVENTVALIDATION = soup.find(id='__EVENTVALIDATION')['value']
-print(VIEWSTATE)
-print('===============')
-print(EVENTVALIDATION)
