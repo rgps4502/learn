@@ -1,9 +1,8 @@
-
+# -*- coding:utf-8 -*-
 import requests
-import pandas
-from lxml import etree
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
+
 
 # 查詢公司的基金購買的股票有哪幾隻
 # 判斷出公司基金購買重複次數最高的股票
@@ -32,7 +31,7 @@ def req(session, url, header, payload=None):
         print(f)
 
 
-def search_stock(session, url):
+def search_stock(session, url, company):
     # 定義header
     header = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -46,9 +45,8 @@ def search_stock(session, url):
     # 選擇年月份
     month = soup.select_one('#ctl00_ContentPlaceHolder1_ddlQ_YM').select_one(
         'option[selected="selected"]')['value']
-    # 選擇公司
-    company = soup.select_one(
-        '#ctl00_ContentPlaceHolder1_ddlQ_Comid1').select_one('option[selected="selected"]')['value']
+    com = soup.find(
+        id="ctl00_ContentPlaceHolder1_ddlQ_Comid")
 
     # 定義data
     data = {
@@ -66,21 +64,59 @@ def search_stock(session, url):
     }
     # 查詢公司+國內投資股票類型
     soup = req(session, url, header, data)
-    # with open('G:\\GitHub\\learn\\python學習\\股票\\respon.html', 'w', encoding='UTF-8') as f:
-    # f.write(str(soup.prettify()))
-    # 獲取基金名稱
-    tag1 = soup.select_one('.DTHeader').getText()
-    print(tag1)
-    tag_name = soup.select(
-        '.DTeven')[4]
-    tag_name1 = soup.select(
-        '.DTeven')[14]
-    tag_name2 = soup.select(
-        '.DTeven')[24]
-    # dfs = pandas.read_html(tag_name)
-    print(tag_name)
-    print(tag_name1)
-    print(tag_name2)
+    with open('G:\\GitHub\\learn\\python學習\\股票\\respon.html', 'w', encoding='UTF-8') as f:
+        f.write(str(soup))
+    # 獲取基金公司的數量(用字串'合計'做次數 幾家)
+    tag_count = soup.select('td[colspan="9"]')
+    stock_count = len(tag_count)
+    # print(stock_count)
+
+    # 獲取標得列表 他的表示由DTeven與DTodd組成
+    stock_DTeven_list = soup.select('.DTeven')
+    stock_DTodd_list = soup.select('.DTodd')
+    # 定義出現標的次數清單
+    stock_count_list = []
+    # 定義要比較的標的清單
+    stock_list = []
+    # 定義出現標的代號(股票代號)
+    stock_code_list = []
+    # 獲取第一家基金的10個標列表(5個) 加入到標的清單  用第一家的10個標 去比較是否每一個公司基金都有購買同一個標
+    x = 0
+    for i in stock_DTeven_list:
+        # 獲取股票代號
+        if x in [3, 12, 21, 30, 39]:
+            stock_code_list.append(i.getText())
+            # 這個意思stock_DTeven_list[3]
+        # 獲取股票清單
+        elif x in [4, 13, 22, 31, 40]:
+            stock_list.append(i.getText())
+        x = x + 1
+
+    # 獲取第一家基金的10個標列表(5個) 加入到標的清單
+    r = 0
+    for i in stock_DTodd_list:
+        # 獲取股票代號
+        if r in [2, 11, 20, 29, 38]:
+            stock_code_list.append(i.getText())
+        # 獲取股票清單
+        elif r in [3, 12, 21, 30, 39]:
+            stock_list.append(i.getText())
+        r = r + 1
+
+    # 將股票代號與股票作成字典
+    stock_dict = dict(zip(stock_list, stock_code_list))
+
+    # 用股票清單去找出出現次數的股票加入stock_count_list清單
+    for stock in stock_list:
+        for i in stock_DTeven_list:
+            if stock == i.getText():
+                stock_count_list.append(stock)
+        for i in stock_DTodd_list:
+            if stock == i.getText():
+                stock_count_list.append(stock)
+        # 比對出現次數是否跟stock_count 一致 (有幾家基金就有多少stock_count) 表示條件判斷100%出現
+        if stock_count_list.count(stock) == stock_count:
+            print(stock, stock_dict.get(stock))
 
 
 # 定義網頁
@@ -89,4 +125,11 @@ url = 'https://www.sitca.org.tw/ROC/Industry/IN2629.aspx?pid=IN22601_04'
 test_connect = HTTPAdapter(max_retries=3)
 session = requests.session()
 session.mount(url, test_connect)
-search_stock(session, url)
+# 選擇公司A0001~A0050
+# company_list = ['A0001', 'A0003', 'A0004', 'A0005', 'A0006', 'A0007', 'A0008', 'A0009', 'A0010', 'A0011', 'A0012', 'A0014', 'A0015', 'A0016', 'A0017', 'A0018', 'A0020', 'A0021', 'A0022',
+#                 'A0025', 'A0026', 'A0027', 'A0031', 'A0032', 'A0033', 'A0035', 'A0036', 'A0037', 'A0038', 'A0040', 'A0041', 'A0042', 'A0043', 'A0044', 'A0045', 'A0047', 'A0048', 'A0049', 'A0050']
+company_list = ['A0001']
+for company in company_list:
+    print(company)
+    search_stock(session, url, company)
+    print("============")
