@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
+from os import set_inheritable
 import requests
+import time
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
 
@@ -31,6 +33,28 @@ def req(session, url, header, payload=None):
         print(f)
 
 
+def git_company_name_dict(url):
+    # 定義header
+    header = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36 Edg/95.0.1020.53'
+    }
+    # get獲取公司名稱與代號
+    soup = req(session, url, header)
+    # 獲取公司+公司代號的option列表 EX：A0035 鋒裕匯理投信
+    com = soup.find(
+        id="ctl00_ContentPlaceHolder1_ddlQ_Comid").find_all('option')
+    # 定義公司代號list
+    company_code = []
+    # 定義公司名稱list
+    company_name = []
+    for option in com:
+        company_code.append(option.text.split()[0])
+        company_name.append(option.text.split()[1])
+    company_name_dict = dict(zip(company_code, company_name))
+    return company_name_dict, company_code
+
+
 def search_stock(session, url, company):
     # 定義header
     header = {
@@ -45,9 +69,6 @@ def search_stock(session, url, company):
     # 選擇年月份
     month = soup.select_one('#ctl00_ContentPlaceHolder1_ddlQ_YM').select_one(
         'option[selected="selected"]')['value']
-    com = soup.find(
-        id="ctl00_ContentPlaceHolder1_ddlQ_Comid")
-
     # 定義data
     data = {
         '__EVENTTARGET': '',
@@ -116,7 +137,36 @@ def search_stock(session, url, company):
                 stock_count_list.append(stock)
         # 比對出現次數是否跟stock_count 一致 (有幾家基金就有多少stock_count) 表示條件判斷100%出現
         if stock_count_list.count(stock) == stock_count:
-            print(stock, stock_dict.get(stock))
+            #返回message.append(search_stock(session, url, company))
+            # print(stock, stock_dict.get(stock))
+            message.append('\n')
+            message.append([stock, stock_dict.get(stock)])
+    return message
+
+
+# 定義傳送line
+def lineNotifyMessage(msg):
+    headers = {
+        "Authorization": "Bearer " + '5AU3kxtaK0PCB35oscTx7F2AKHlTVqX73Q2bDu1DfqY',
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+
+    payload = {'message': msg}
+    r = requests.post("https://notify-api.line.me/api/notify",
+                      headers=headers, params=payload)
+    return r.status_code
+
+
+# def sed_line(fist, end=None):
+#     for company in company_list[fist:end]:
+#         message.append('\n')
+#         message.extend([company, company_name_dict.get(company)])
+#         search_stock(session, url, company)
+#         message.append('\n')
+#         message.append("============")
+#     # 發送給line
+#     lineNotifyMessage(message)
+    # print(message)
 
 
 # 定義網頁
@@ -125,11 +175,33 @@ url = 'https://www.sitca.org.tw/ROC/Industry/IN2629.aspx?pid=IN22601_04'
 test_connect = HTTPAdapter(max_retries=3)
 session = requests.session()
 session.mount(url, test_connect)
-# 選擇公司A0001~A0050
-# company_list = ['A0001', 'A0003', 'A0004', 'A0005', 'A0006', 'A0007', 'A0008', 'A0009', 'A0010', 'A0011', 'A0012', 'A0014', 'A0015', 'A0016', 'A0017', 'A0018', 'A0020', 'A0021', 'A0022',
-#                 'A0025', 'A0026', 'A0027', 'A0031', 'A0032', 'A0033', 'A0035', 'A0036', 'A0037', 'A0038', 'A0040', 'A0041', 'A0042', 'A0043', 'A0044', 'A0045', 'A0047', 'A0048', 'A0049', 'A0050']
-company_list = ['A0001']
-for company in company_list:
-    print(company)
+# 定義要發給Line的訊息
+message = []
+# 獲取公司listA0001~A0050
+company_list = git_company_name_dict(url)[1]
+# company_list = ['A0001', 'A0003', 'A0001', 'A0003', 'A0001', 'A0004']
+# 獲取公司+代碼的字典dirt
+company_name_dict = git_company_name_dict(url)[0]
+# 先回圈前25個並寄送到Line上(line沒辦法一次接收太多)
+for company in company_list[:20]:
+    message.append('\n')
+    message.extend([company, company_name_dict.get(company)])
     search_stock(session, url, company)
-    print("============")
+    message.append('\n')
+    message.append("============")
+# 發送給line
+lineNotifyMessage(message)
+for company in company_list[-20:]:
+    message.append('\n')
+    message.extend([company, company_name_dict.get(company)])
+    search_stock(session, url, company)
+    message.append('\n')
+    message.append("============")
+# 發送給line
+lineNotifyMessage(message)
+# sed_line(0, 20)
+# time.sleep(20)
+# sed_line(21, 35)
+# time.sleep(20)
+# sed_line(36)
+# sed_line(40)
