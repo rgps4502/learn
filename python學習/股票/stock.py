@@ -1,14 +1,11 @@
 # -*- coding:utf-8 -*-
-from os import set_inheritable
 import requests
+import json
 import time
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
-
-
 # 查詢公司的基金購買的股票有哪幾隻
 # 判斷出公司基金購買重複次數最高的股票
-
 # 訪問查詢公司股票網頁
 
 
@@ -41,6 +38,9 @@ def git_company_name_dict(url):
     }
     # get獲取公司名稱與代號
     soup = req(session, url, header)
+    # 選擇年月份
+    month = soup.select_one('#ctl00_ContentPlaceHolder1_ddlQ_YM').select_one(
+        'option[selected="selected"]')['value']
     # 獲取公司+公司代號的option列表 EX：A0035 鋒裕匯理投信
     com = soup.find(
         id="ctl00_ContentPlaceHolder1_ddlQ_Comid").find_all('option')
@@ -48,14 +48,15 @@ def git_company_name_dict(url):
     company_code = []
     # 定義公司名稱list
     company_name = []
+    # 把獲取到的公司代+代號分成兩個List
     for option in com:
         company_code.append(option.text.split()[0])
         company_name.append(option.text.split()[1])
     company_name_dict = dict(zip(company_code, company_name))
-    return company_name_dict, company_code
+    return company_name_dict, company_code, month
 
 
-def search_stock(session, url, company):
+def search_stock(session, url, company, stock_coun=None):
     # 定義header
     header = {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -89,7 +90,11 @@ def search_stock(session, url, company):
         f.write(str(soup))
     # 獲取基金公司的數量(用字串'合計'做次數 幾家)
     tag_count = soup.select('td[colspan="9"]')
-    stock_count = len(tag_count)
+    if stock_coun == None:
+        stock_count = len(tag_count)
+    else:
+        stock_count = len(tag_count)
+        return stock_count
     # print(stock_count)
 
     # 獲取標得列表 他的表示由DTeven與DTodd組成
@@ -126,7 +131,6 @@ def search_stock(session, url, company):
 
     # 將股票代號與股票作成字典
     stock_dict = dict(zip(stock_list, stock_code_list))
-
     # 用股票清單去找出出現次數的股票加入stock_count_list清單
     for stock in stock_list:
         for i in stock_DTeven_list:
@@ -138,9 +142,10 @@ def search_stock(session, url, company):
         # 比對出現次數是否跟stock_count 一致 (有幾家基金就有多少stock_count) 表示條件判斷100%出現
         if stock_count_list.count(stock) == stock_count:
             #返回message.append(search_stock(session, url, company))
-            # print(stock, stock_dict.get(stock))
+            #print(stock, stock_dict.get(stock))
             message.append('\n')
-            message.append([stock, stock_dict.get(stock)])
+            message.append(stock + ' : ' + stock_dict.get(stock))
+
     return message
 
 
@@ -157,18 +162,6 @@ def lineNotifyMessage(msg):
     return r.status_code
 
 
-# def sed_line(fist, end=None):
-#     for company in company_list[fist:end]:
-#         message.append('\n')
-#         message.extend([company, company_name_dict.get(company)])
-#         search_stock(session, url, company)
-#         message.append('\n')
-#         message.append("============")
-#     # 發送給line
-#     lineNotifyMessage(message)
-    # print(message)
-
-
 # 定義網頁
 url = 'https://www.sitca.org.tw/ROC/Industry/IN2629.aspx?pid=IN22601_04'
 # 定義重新連線次數3
@@ -179,29 +172,29 @@ session.mount(url, test_connect)
 message = []
 # 獲取公司listA0001~A0050
 company_list = git_company_name_dict(url)[1]
-# company_list = ['A0001', 'A0003', 'A0001', 'A0003', 'A0001', 'A0004']
+# company_list = ['A0001', 'A0003']
 # 獲取公司+代碼的字典dirt
 company_name_dict = git_company_name_dict(url)[0]
-# 先回圈前25個並寄送到Line上(line沒辦法一次接收太多)
-for company in company_list[:20]:
+# 獲取查詢的年月
+month = git_company_name_dict(url)[2]
+
+# 先回圈每17個並寄送到Line上(line沒辦法一次接收太多)
+count = 1
+for company in company_list:
+    # 獲取基金總數stock_coun=1 是因為只要獲取基金數後面不執行作的判斷
+    stock_count = search_stock(session, url, company, stock_coun=1)
     message.append('\n')
-    message.extend([company, company_name_dict.get(company)])
+    message.append(month+'月篩選表')
+    message.append('\n')
+    message.append(company + ' : ' +
+                   company_name_dict.get(company) + '  ' + '基金數共: '+str(stock_count))
     search_stock(session, url, company)
     message.append('\n')
     message.append("============")
-# 發送給line
-lineNotifyMessage(message)
-for company in company_list[-20:]:
-    message.append('\n')
-    message.extend([company, company_name_dict.get(company)])
-    search_stock(session, url, company)
-    message.append('\n')
-    message.append("============")
-# 發送給line
-lineNotifyMessage(message)
-# sed_line(0, 20)
-# time.sleep(20)
-# sed_line(21, 35)
-# time.sleep(20)
-# sed_line(36)
-# sed_line(40)
+    # % 餘數運算被18整除=0 or 當不能被18整除 最後一筆 (用整個list列表的長度去計算)
+    if count % 1 == 0 or count == len(company_list):
+        # 發送給line
+        lineNotifyMessage(''.join(message))
+        print(''.join(message))
+        message = []
+    count = count + 1
