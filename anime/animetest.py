@@ -53,7 +53,7 @@ if newDate != oldDate:
     for newan in Compareddf:
         all_lists.insert(1, newan)  # 把新的插入總表做後續比較用
         all_lists.pop()  # 移除總表的最後一個保持15個
-    #Compareddf.insert(0, '')
+    Compareddf.insert(0, '')
     message = ('\n'.join(map(str, Compareddf)))
     all_list = ('\n'.join(map(str, all_lists)))
     sendmessage(message, nowTime)
