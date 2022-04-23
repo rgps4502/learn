@@ -58,6 +58,6 @@ if newDate != oldDate:
     all_list = ('\n'.join(map(str, all_lists)))
     sendmessage(message, nowTime)
     datemessage = ('\n'.join(map(str, newDate)))
-    openw('/root/learn/anime/all_list.txt', all_list)
+    openw('/root/learn/anime/all_list.txt', datemessage)
     openw("/root/learn/anime/oldDate.txt", datemessage)  # 新date寫入舊的下次比對用
 # print(message)
