@@ -2,9 +2,9 @@
 pip install pyinstaller
 
 打包py檔案
-pyinstaller -F .py檔案
+pyinstaller -F -w .py檔案
 
-ex: pyinstaller -F G:\GitHub\learn\python學習\股票\stock.py
+ex: pyinstaller -F -w G:\GitHub\learn\python學習\股票\stock.py
 
 打包會出現build  dict  打包檔案.spec
 
