@@ -1,0 +1,11 @@
+安裝打包
+pip install pyinstaller
+
+打包py檔案
+pyinstaller -F .py檔案
+
+ex: pyinstaller -F G:\GitHub\learn\python學習\股票\stock.py
+
+打包會出現build  dict  打包檔案.spec
+
+打包完成的.exe擋在 dict裡面就是
