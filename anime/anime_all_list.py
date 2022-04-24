@@ -52,6 +52,7 @@ all_list = data()
 all_list1 = ('\n'.join(map(str, all_list)))
 writef('all_list.txt', all_list1)
 
-newDate1 = all_list
-newDate = ('\n'.join(map(str, newDate1)))
+newDate = all_list1
+
 writef('oldDate.txt', newDate)
+sendmessage(newDate)

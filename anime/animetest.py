@@ -44,8 +44,8 @@ def sendmessage(message, nowTime):
 
 url = 'https://myself-bbs.com/portal.php'
 nowTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-oldDate = openr('/root/learn/anime/oldDate.txt')  # oldDate = data()
-all_lists = openr('/root/learn/anime/all_list.txt')  # 取all_list
+oldDate = openr('oldDate.txt')  # oldDate = data()
+all_lists = openr('all_list.txt')  # 取all_list
 newDate = data()
 if newDate != oldDate:
     # 比較打印出在總表list不相同的
@@ -58,6 +58,6 @@ if newDate != oldDate:
     all_list = ('\n'.join(map(str, all_lists)))
     sendmessage(message, nowTime)
     datemessage = ('\n'.join(map(str, newDate)))
-    openw('/root/learn/anime/all_list.txt', datemessage)
-    openw("/root/learn/anime/oldDate.txt", datemessage)  # 新date寫入舊的下次比對用
+    openw('all_list.txt', datemessage)
+    openw("oldDate.txt", datemessage)  # 新date寫入舊的下次比對用
 # print(message)
