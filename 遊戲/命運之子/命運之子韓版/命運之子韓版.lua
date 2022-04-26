@@ -324,11 +324,18 @@ function food20_max20() --當肥料20等換肥
         swipe(Location(280, 300), Location(280, 500))
     end
     sleep(0.7)
-    repeat
-        click(Location(266, 661))
-        wait(2)
-        join_team:existsClick('join_team.png', 2)
-    until star2:exists('star2.png', 3)
+    star2:waitVanish('star2.png', 60) --等待60秒肥料被更換拉下
+    --換肥邏輯
+    while not star2:exists('star2.png', 0) do
+        if not star2:exists('star2.png', 0) then
+            click(Location(266, 561))
+            join_team:existsClick('join_team.png', 0)
+            if join_team:exists('join_team.png', 0) then
+                sleep(2)
+            elseif pvp_no_ticket:existsClick('no_ticket.png', 0) then
+            end
+        end
+    end
     exit_team:existsClick('agate_exit.png', 0)
 end
 
@@ -353,7 +360,7 @@ function buy_h() ---用錢買體力
     end
 end
 
--- =使用者自訂=========
+--==使用者自訂=========
 --按鈕選單
 allTroops = {
     '困難4-5-1',
