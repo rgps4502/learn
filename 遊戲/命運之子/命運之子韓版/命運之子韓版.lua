@@ -28,8 +28,7 @@ money_buy = Region(402, 988, 156, 90)
 
 --練肥---------------------------
 checkpoint = Region(588, 882, 200, 180) --點擊刷圖
-pointnumber = Region(360, 235, 200, 180) --點擊4-6關卡
-pointnumber2 = Region(0, 300, 700, 150) --點擊4-6-1關卡
+wave_exe = Region(150, 480, 77, 80) --尋找經驗關卡
 fight_config = Region(560, 250, 200, 100) --設定輪迴條件
 fight_confirm = Region(315, 1125, 200, 100) --輪迴條件確認
 fight_start = Region(570, 440, 200, 100) --開始戰鬥
@@ -138,12 +137,12 @@ function friend_PVP() --打好友
     -- maxDistance: 每次移動最遠距離，如果移動距離超過，會插入每次多個距離為maxDistance的移動點，初始值為5
     -- insertWaitTimeMs: 如果需要插入移動點，會再前面同時插入等待insertWaitTime毫秒(millisecond)，初始值為1
     -- 調整適當的參數，可以在速度與正確性取得平衡
-    setManualTouchParameter(5, 1)
+    setManualTouchParameter(2, 1)
     actionList = {
         {action = 'touchDown', target = p1}, --設定actionlist P1點按下
         {action = 'wait', target = 0.4}, --等待0.4秒
         {action = 'touchMove', target = p2}, --移動到p2點
-        {action = 'wait', target = 0.4}, --等待0.4秒
+        {action = 'wait', target = 0.7}, --等待0.4秒
         {action = 'touchUp', target = p2}
     } --放開
     friend_pk:existsClick('friend.png', 0)
@@ -158,10 +157,9 @@ function friend_PVP() --打好友
                 pk:exists('pk.png', 0)
             sleep(5)
         else
-            repeat
-                -- manualTouch(actionList) --調用actionList 無障礙7.0不支援
-                swipe(Location(555, 1000), Location(555, 330))
-            until pk:exists('pk.png', 2)
+            while not pk:exists('pk.png', 1) do
+                manualTouch(actionList) --調用actionList 無障礙7.0不支援 -- swipe(Location(555, 1000), Location(555, 330))
+            end
         end
     end
 end
@@ -170,42 +168,27 @@ function food(wave) --練肥
     --如果沒有找到戰鬥按鈕就重主介面尋找球圖標
     if not fight_start:exists('fight_start.png', 1) then
         if checkpoint:existsClick('checkpoint.png', 30) then --點擊刷圖
-            sleep(2)
-            if wave == '簡單1-4-6' then
-                for i = 1, 3 do
-                    click(Location(361, 87))
-                    sleep(0.7)
+            checkpoint:waitVanish('checkpoint.png', 30) --等待圖消失
+            click(Location(175, 665))
+            if wave == '簡單1-4-6' or wave == '困難1-4-6' then
+                click(Location(374, 575))
+                sleep(1)
+                if wave == '困難1-4-6' then
+                    click(Location(363, 442))
+                elseif wave == '簡單1-4-6' then
+                    click(Location(256, 442))
                 end
-                click(Location(256, 985)) --選擇簡單
-                sleep(1)
-                click(Location(360, 1058)) --選擇第4關
-                sleep(1)
-                pointnumber:existsClick('4-6.png', 20) --點擊4-6關卡
-                sleep(2)
-                pointnumber2:existsClick('4-6-1.png', 20) --點擊4-6-1關卡
-            elseif wave == '困難1-4-6' then
-                for i = 1, 3 do
-                    click(Location(361, 87))
-                    sleep(0.7)
-                end
-                click(Location(360, 988)) --選擇HARD
-                sleep(1)
-                click(Location(360, 1058)) --選擇第4關
-                sleep(1)
-                pointnumber:existsClick('4-6.png', 20) --點擊4-6關卡
-                sleep(2)
-                pointnumber2:existsClick('4-6-1.png', 20) --點擊4-6-1關卡
+                sleep(0.5)
+                click(Location(337, 385))
+                sleep(0.5)
+                find_wave()
+                click(Location(562, 600))
             elseif wave == '困難4-5-1' then
-                for i = 1, 3 do
-                    click(Location(359, 931))
-                    sleep(0.7)
-                end
-                click(Location(360, 988)) --選擇HARD
-                sleep(0.7)
-                click(Location(290, 1058)) --點選4-5關卡
-                sleep(0.7)
-                click(Location(172, 797)) --點選4-5關卡
-                pointnumber2:existsClick('4-5-1.png', 20) --點擊4-6-1關卡
+                click(Location(374, 1145))
+                sleep(1)
+                click(Location(364, 446))
+                sleep(0.5)
+                click(Location(554, 626))
             end
         end
     end
@@ -241,10 +224,12 @@ function food(wave) --練肥
             choose:existsClick('choose.png', 5)
             choose_confirm:existsClick('choose_confirm.png', 1)
             choose_ok:existsClick('choose_ok.png', 1)
-            agate_exit:existsClick('agate_exit.png', 10)
+            agate_exit:existsClick('agate_exit.png', 60)
+            agate_exit:waitVanish('agate_exit.png', 60)
             exit:existsClick('exit.png', 1)
-            sleep(1)
+            choose_confirm:waitVanish('choose_confirm.png', 30)
             exit:existsClick('exit.png', 1)
+            agate_2:waitVanish('agate_2.png', 20)
             sleep(1)
             if right_20:exists('leavl20.png', 1) then --如果同時肥料滿 又20等的設定(判斷最右邊的肥料是否20等) 判斷是否有肥料20等
                 food20_max20()
@@ -308,20 +293,20 @@ end
 function food20_max20() --當肥料20等換肥
     if star3:exists('star3.png', 0) then --如果第二格是2星就更換 1 更換 0 不更換
         c = 0
-        swipe(Location(580, 300), Location(580, 500)) --最後一格
+        swipe(Location(380, 300), Location(380, 500)) --倒數第三格
         wait(2)
         swipe(Location(480, 300), Location(480, 500)) --倒數第二格
         wait(2)
-        swipe(Location(380, 300), Location(380, 500)) --倒數第三格
+        swipe(Location(580, 300), Location(580, 500)) --最後一格
     else --一帶四
         c = 1
-        swipe(Location(580, 300), Location(580, 500))
-        wait(2)
-        swipe(Location(480, 300), Location(480, 500))
+        swipe(Location(280, 300), Location(280, 500))
         wait(2)
         swipe(Location(380, 300), Location(380, 500))
         wait(2)
-        swipe(Location(280, 300), Location(280, 500))
+        swipe(Location(480, 300), Location(480, 500))
+        wait(2)
+        swipe(Location(580, 300), Location(580, 500))
     end
     sleep(0.7)
     star2:waitVanish('star2.png', 60) --等待60秒肥料被更換拉下
@@ -329,14 +314,39 @@ function food20_max20() --當肥料20等換肥
     while not star2:exists('star2.png', 0) do
         if not star2:exists('star2.png', 0) then
             click(Location(266, 561))
-            join_team:existsClick('join_team.png', 0)
+            if star2:exists('star2.png', 0) then
+                break
+            elseif join_team:existsClick('join_team.png', 0) then
+            end
             if join_team:exists('join_team.png', 0) then
                 sleep(2)
-            elseif pvp_no_ticket:existsClick('no_ticket.png', 0) then
             end
+            pvp_no_ticket:existsClick('no_ticket.png', 0)
         end
     end
     exit_team:existsClick('agate_exit.png', 0)
+    exit_team:waitVanish('agate_exit.png', 60)
+end
+
+--滑動找尋關卡
+function find_wave()
+    --設定要移動的位置距離
+    p1 = Location(64, 1048)
+    p2 = Location(64, 528)
+    -- maxDistance: 每次移動最遠距離，如果移動距離超過，會插入每次多個距離為maxDistance的移動點，初始值為5
+    -- insertWaitTimeMs: 如果需要插入移動點，會再前面同時插入等待insertWaitTime毫秒(millisecond)，初始值為1
+    -- 調整適當的參數，可以在速度與正確性取得平衡
+    setManualTouchParameter(2, 1)
+    actionList = {
+        {action = 'touchDown', target = p1}, --設定actionlist P1點按下
+        {action = 'wait', target = 0.4}, --等待0.4秒
+        {action = 'touchMove', target = p2}, --移動到p2點
+        {action = 'wait', target = 0.4}, --等待0.4秒
+        {action = 'touchUp', target = p2}
+    } --放開
+    while not wave_exe:exists('wave_EXP.png', 0) do
+        manualTouch(actionList) --調用actionList 無障礙7.0不支援
+    end
 end
 
 function buy_h() ---用錢買體力
@@ -355,13 +365,16 @@ function buy_h() ---用錢買體力
     if money_buy:exists('money_buy.png', 0) then
         while true do
             money_buy:existsClick('money_buy.png', 0)
-            click(Location(506, 716))
+            if pvp_start1:exists('pvp_start1.png', 0) then
+                pvp_start1:existsClick('pvp_start1.png', 10)
+                pvp_start1:waitVanish('pvp_start1.png', 60)
+            end
         end
     end
 end
 
 --==使用者自訂=========
---按鈕選單
+------按鈕選單
 allTroops = {
     '困難4-5-1',
     '困難1-4-6',
