@@ -1,0 +1,15 @@
+G:\GitHub\learn\.Net\bin\Debug\net6.0\.Net.exe
+G:\GitHub\learn\.Net\bin\Debug\net6.0\.Net.deps.json
+G:\GitHub\learn\.Net\bin\Debug\net6.0\.Net.runtimeconfig.json
+G:\GitHub\learn\.Net\bin\Debug\net6.0\.Net.dll
+G:\GitHub\learn\.Net\bin\Debug\net6.0\.Net.pdb
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.csproj.AssemblyReference.cache
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.GeneratedMSBuildEditorConfig.editorconfig
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.AssemblyInfoInputs.cache
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.AssemblyInfo.cs
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.csproj.CoreCompileInputs.cache
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.dll
+G:\GitHub\learn\.Net\obj\Debug\net6.0\refint\.Net.dll
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.pdb
+G:\GitHub\learn\.Net\obj\Debug\net6.0\.Net.genruntimeconfig.cache
+G:\GitHub\learn\.Net\obj\Debug\net6.0\ref\.Net.dll

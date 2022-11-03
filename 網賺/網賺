@@ -1,0 +1,75 @@
+https://simplebits.io/register
+username rgps4502
+rgps45021@gmail.com
+tim62712tim62712
+
+======================================
+https://dashboard.honeygain.com/
+rgps45021@gmail.com
+tim X2
+小蜜蜂 網賺 5/25  1:00
+docker run -itd --name honeygain --restart unless-stopped honeygain/honeygain -tou-accept -email rgps45021@gmail.com -pass tim62712tim62712 -device honeygain_linux2
+
+
+
+========================================
+
+https://app.traffmonetizer.com/dashboard
+Traffmonetizer  5/25 2:35
+name : rgps4502
+rgps45021@gmail.com
+Tim X2 2
+docker run -itd --name traffmonetizer --restart unless-stopped traffmonetizer/cli start accept --token db+5PCoHwFfPqo7aK9Ge2xq/gl8LiEZjH46ux+cBiQk=
+
+===============================================
+
+https://pawns.iproyal.com/
+iproyal  5/26  12:00
+username rgps4502
+rgps45021@gmail.com
+Tim X2
+
+
+docker run -itd --name iproyal01 --restart=always iproyal/pawns-cli:latest -email=rgps45021@gmail.com -password=Tim62712tim62712 -device-name=raspberrypi -accept-tos
+
+====================================================
+
+https://packetstream.io/
+username  rgps4502
+rgps45021@gmail.com
+Tim X2
+
+=====================================================
+
+https://dashboard.peer2profit.app
+rgps45021@gmail.com
+Tim62712tim62712
+docker run -itd --dns 8.8.8.8 --dns 1.1.1.1 --dns 9.9.9.9 --name peer2profit --restart unless-stopped  -e P2P_EMAIL=rgps45021@gmail.com  peer2profit/peer2profit_linux:latest 
+
+多開
+wget -q https://bit.ly/peer2fly -O peer2fly.sh
+bash peer2fly.sh --email rgps45021@gmail.com --number 3
+==========================================================
+
+https://earnapp.com/dashboard
+google帳號登入 rgps45021@gmail.com
+
+在linux 系統下 指令
+mkdir $HOME/earnapp-data
+命令解釋 新增資料夾 在Home 底下
+docker run -itd --restart unless-stopped --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $HOME/earnapp-data:/etc/earnapp --name earnapp fazalfarhan01/earnapp
+獲取uuid
+docker exec -it earnapp earnapp showid 
+
+
+進到earnapp容器下指令 綁定uuid
+wget -qO- https://brightdata.com/static/earnapp/install.sh > /tmp/earnapp.sh && sudo bash /tmp/earnapp.sh
+yes
+
+=============================================
+https://www.feelingsurf.fr/dashboard
+FeelingSurf
+username rgps4502
+rgps45021@gmail.com
+Tim x2
+docker run -itd --name FeelingSurf --restart unless-stopped -e access_token=52df74fbc57cfeb4e37f7deb51937ed2 --cap-add SYS_ADMIN feelingsurf/viewer:stable
