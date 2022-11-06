@@ -2,7 +2,7 @@
 -- ========== Settings ================
 Settings:setCompareDimension(true, 1080) --模擬器寬
 Settings:setScriptDimension(true, 1080)
-Settings:set('MinSimilarity', 0.85) --圖片精準度
+Settings:set('MinSimilarity', 0.83) --圖片精準度
 -- Settings:autoGameArea(true) --導航條必須要有
 
 -- =========區域=======
@@ -62,7 +62,9 @@ send_killer_redier = Region(560, 801, 66, 66)
 redier_kill = Region(16, 790, 132, 131)
 redier_fight = Region(896, 1285, 135, 65)
 redier_kill_mode = Region(851, 552, 200, 55)
-redier_kill_level30 = Region(27, 692, 120, 767)
+redier_kill_level30 = Region(27, 582, 150, 900)
+redier_wait_level30 = Region(88, 512, 112, 50)
+
 --打好友
 friend_pk = Region(69, 330, 160, 80)
 pk = Region(769, 580, 110, 1110) --開始PK
@@ -195,7 +197,7 @@ function food(hot, star) --練肥
                     {action = 'touchUp', target = p2}
                 } --放開
                 manualTouch(actionList)
-                sleep(0.5)
+                sleep(0.6)
                 click(Location(834, 2096))
             elseif star == '二星' then
                 sleep(0.5)
@@ -212,7 +214,7 @@ function food(hot, star) --練肥
                     time = os.date('%H')
                 until time == '18'
             end
-            if time == ('18' or '19') then
+            if (time == '18') or (time == '19') then
                 --檢查是否滿級先換肥料
                 if leavl_20:exists('leavl20.png', 0) and not leavl_check3star:exists('leavl_check3star.png', 0) then
                     click(Location(534, 453)) --進入隊伍花面
@@ -336,7 +338,7 @@ function food20_max20() --當肥料20等換肥
     exit_team:existsClick('agate_exit.png', 0)
 end
 
-function foods_full()
+function foods_full() --換瑪瑙
     if not agate:exists('agate.png', 2) then
         agate_point:existsClick('agate_point.png', 0)
         agate:existsClick('agate.png', 2)
@@ -379,47 +381,60 @@ function buy_h() ---用錢買體力
     end
 end
 
-function redier_f()
+function redier_f() --打redier
     redier_fight:existsClick('redier_fight.png', 0)
     sleep(2)
     while (true) do
         if redier_kill_mode:exists('redier_kill_mode.png', 20) then
-            sleep(0.7)
-            redier_kill_mode:existsClick('redier_kill_mode.png', 0)
-            redier_kill_mode:existsClick('redier_kill_mode.png', 0)
-            redier_kill_mode:waitVanish('redier_kill_mode.png', 10)
-            redier_kill_level30:existsClick('redier_kill_level30.png', 20)
-            if fight_redier:exists('fight_redier.png', 30) then
-                sleep(1)
-                fight_redier:existsClick('fight_redier.png', 0)
+            sleep(2)
+            if redier_kill_mode:exists('redier_kill_mode.png', 0) then
+                repeat
+                    redier_kill_mode:existsClick('redier_kill_mode.png', 0)
+                until not redier_kill_mode:exists('redier_kill_mode.png', 0)
             end
-            repeat
-                sleep(4)
-            until redier_die:exists('redier_die.png', 0) or redier_kill:exists('redier_kill.png', 0) or
-                pvp_no_ticket:exists('no_ticket.png', 0) --等待打完 點球回主畫面
-            if redier_die:exists('redier_die.png', 0) or redier_kill:exists('redier_kill.png', 0) then
-                sleep(2)
-                redier_kill:existsClick('redier_kill.png', 2)
-                redier_die:existsClick('redier_die.png', 2)
-                exit:wait('exit.png', 30)
-                sleep(2)
-                if not send_killer_redier:exists('send_killer_redier.png', 2) then
-                    sleep(0.5) --如果沒有辦法發送殺手模式就等待0.5
-                else
-                    send_killer_redier:exists('send_killer_redier.png', 0) --發送殺手模式
-                    sleep(1)
-                    send_killer_redier:existsClick('send_killer_redier.png', 0) --發送殺手模式
-                    pvp_no_ticket:existsClick('no_ticket.png', 10)
-                    sleep(3)
-                end
-            elseif pvp_no_ticket:exists('no_ticket.png', 0) then --如果沒體力直接離開
-                pvp_no_ticket:existsClick('no_ticket.png', 0)
-                sleep(3)
-                if send_killer_redier:exists('send_killer_redier.png', 30) then --發送殺手模式
-                    sleep(1)
-                    send_killer_redier:existsClick('send_killer_redier.png', 0) --發送殺手模式
-                    sleep(3)
-                    pvp_no_ticket:existsClick('no_ticket.png', 2)
+            redier_kill_mode:waitVanish('redier_kill_mode.png', 10)
+            if not redier_kill_level30:exists('redier_kill_level30.png', 20) then --沒有30等目標
+                redier_wait_level30:existsClick('redier_wait_level30.png', 400) --等待五分鐘點擊刷新
+            else
+                if redier_kill_level30:exists('redier_kill_level30.png', 20) then
+                    if redier_kill_level30:exists('redier_kill_level30.png', 0) then
+                        sleep(0.5)
+                        redier_kill_level30:existsClick('redier_kill_level30.png', 2)
+                        if fight_redier:exists('fight_redier.png', 30) then
+                            repeat
+                                fight_redier:existsClick('fight_redier.png', 0)
+                            until not fight_redier:exists('fight_redier.png', 0) or
+                                pvp_no_ticket:exists('no_ticket.png', 0)
+                        end
+                        repeat
+                            sleep(4)
+                        until redier_die:exists('redier_die.png', 0) or redier_kill:exists('redier_kill.png', 0) or
+                            pvp_no_ticket:exists('no_ticket.png', 0) --等待打完 點球回主畫面
+                    end
+                    if redier_die:exists('redier_die.png', 0) or redier_kill:exists('redier_kill.png', 0) then
+                        sleep(2)
+                        redier_kill:existsClick('redier_kill.png', 2)
+                        redier_die:existsClick('redier_die.png', 2)
+                        -- exit:wait('exit.png', 30)
+                        sleep(2)
+                        if not send_killer_redier:exists('send_killer_redier.png', 0) then
+                            sleep(0.5) --如果沒有辦法發送殺手模式就等待0.5
+                        else
+                            send_killer_redier:exists('send_killer_redier.png', 0) --發送殺手模式
+                            sleep(1)
+                            send_killer_redier:existsClick('send_killer_redier.png', 0) --發送殺手模式
+                            pvp_no_ticket:existsClick('no_ticket.png', 10)
+                            sleep(3)
+                        end
+                    elseif pvp_no_ticket:exists('no_ticket.png', 0) then --如果沒體力直接離開
+                        pvp_no_ticket:existsClick('no_ticket.png', 0)
+                        sleep(3)
+                        exit:existsClick('exit.png', 0)
+                        sleep(0.7)
+                        click(Location(1008, 505))
+                        print('沒有票券了')
+                        exit(1)
+                    end
                 end
             end
         end
@@ -471,7 +486,8 @@ while (true) do
     end
 end
 
--- if redier_kill_level30:existsClick('redier_kill_level30.png', 0) then
+-- redier_kill_level30:highlight()
+-- if redier_kill_level30:exists('redier_kill_level30.png', 2) then
 --     print('yes')
 -- else
 --     print('no')
