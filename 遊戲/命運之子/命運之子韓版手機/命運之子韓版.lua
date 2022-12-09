@@ -52,7 +52,7 @@ right_20 = Region(520, 303, 65, 65) --右側第一格肥料等級20
 star3 = Region(132, 595, 76, 28) --肥料判斷3星
 star2 = Region(781, 595, 55, 30) --肥料判斷2星
 join_team = Region(175, 630, 193, 90) --加入隊伍
-exit_team = Region(491, 1766, 100, 60) --離開隊伍介面
+exit_team = Region(493, 1771, 110, 65) --離開隊伍介面
 
 --打reider---------------------------------------
 go_reder = Region(386, 1681, 325, 100)
@@ -330,7 +330,7 @@ function food20_max20() --當肥料20等換肥
             click(Location(446, 1044))
             join_team:existsClick('join_team.png', 0)
             if join_team:exists('join_team.png', 0) then
-                sleep(1)
+                sleep(2)
             elseif pvp_no_ticket:existsClick('no_ticket.png', 0) then
             end
         end
@@ -400,6 +400,8 @@ function redier_f() --打redier
                     if redier_kill_level30:exists('redier_kill_level30.png', 0) then
                         sleep(0.5)
                         redier_kill_level30:existsClick('redier_kill_level30.png', 2)
+                        sleep(0.5)
+                        click(Location(99, 760))
                         if fight_redier:exists('fight_redier.png', 30) then
                             repeat
                                 fight_redier:existsClick('fight_redier.png', 0)

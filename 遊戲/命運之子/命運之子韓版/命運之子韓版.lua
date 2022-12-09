@@ -132,17 +132,17 @@ end
 
 function friend_PVP() --打好友
     --設定要移動的位置距離
-    p1 = Location(392, 971)
-    p2 = Location(392, 603)
+    p1 = Location(356, 848)
+    p2 = Location(356, 414)
     -- maxDistance: 每次移動最遠距離，如果移動距離超過，會插入每次多個距離為maxDistance的移動點，初始值為5
     -- insertWaitTimeMs: 如果需要插入移動點，會再前面同時插入等待insertWaitTime毫秒(millisecond)，初始值為1
     -- 調整適當的參數，可以在速度與正確性取得平衡
-    setManualTouchParameter(2, 1)
+    setManualTouchParameter(150, 1)
     actionList = {
         {action = 'touchDown', target = p1}, --設定actionlist P1點按下
         {action = 'wait', target = 0.4}, --等待0.4秒
         {action = 'touchMove', target = p2}, --移動到p2點
-        {action = 'wait', target = 0.7}, --等待0.4秒
+        {action = 'wait', target = 0.4}, --等待0.4秒
         {action = 'touchUp', target = p2}
     } --放開
     friend_pk:existsClick('friend.png', 0)
