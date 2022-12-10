@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # 龍瓦天堂二每日自動發推廣
 
+import re
 import requests
 import datetime
 from bs4 import BeautifulSoup
@@ -142,13 +143,14 @@ Discord連結:https://discord.gg/VwzsrUN4TD
 #     # print(response)
 
     response = response.split(' ')[6]
-#     # print(response)
+    # print(response)
     str1 = response
     str2 = "forum.php?"
-#     # print(str1[str1.index(str2):-2])
-    url = 'https://hmsff.com/'+str1[str1.index(str2):-2]
+    res_url = str1[str1.index(str2):-2]
+    # print(str1[str1.index(str2):-2])
+    s = [float(s) for s in re.findall(r'\d+', res_url)]
+    tid = str(s[0])[0:-2]
+    pid = str(s[1])[0:-2]
+    page = str(s[2])[0:-2]
+    url = f'https://hmsff.com/forum.php?mod=viewthread&tid={tid}&page={page}#pid{pid}'
     print('帖子鏈接:'+url)
-
-#     response = '''<?xml version="1.0" encoding="utf-8"?>
-# <root><![CDATA[<script type="text/javascript" reload="1">if(typeof succeedhandle_fastpost=='function') {succeedhandle_fastpost('forum.php?mod=viewthread&tid=241&pid=287841&page=195&extra=#pid287841', '非常感謝，回復發佈成功，現在將轉入主題頁，請稍候……[ 點擊這裡轉入主題
-# 列表 ]', {'fid':'40','tid':'241','pid':'287841','from':'','sechash':''});}</script>]]></root>'''
