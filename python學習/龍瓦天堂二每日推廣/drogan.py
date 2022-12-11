@@ -149,8 +149,6 @@ Discord連結:https://discord.gg/VwzsrUN4TD
     res_url = str1[str1.index(str2):-2]
     # print(str1[str1.index(str2):-2])
     s = [float(s) for s in re.findall(r'\d+', res_url)]
-    tid = str(s[0])[0:-2]
     pid = str(s[1])[0:-2]
-    page = str(s[2])[0:-2]
-    url = f'https://hmsff.com/forum.php?mod=viewthread&tid={tid}&page={page}#pid{pid}'
+    url = f'https://hmsff.com/forum.php?mod=redirect&goto=findpost&ptid=241&pid={pid}'
     print('帖子鏈接:'+url)
