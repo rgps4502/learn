@@ -12,8 +12,8 @@ session = requests.session()
 def res(session, url, data=None):
     # 添加一个user-agent,访问反爬虫策略严格的网站很有用
     userAgent = {
-        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0"}
-    timeOut = 4  # 请求超时时间设置为4秒
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0"
+    }
     try:
         if data != None:
             request = session.post(url, headers=userAgent,
