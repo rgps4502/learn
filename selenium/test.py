@@ -1,40 +1,35 @@
-
-from os import error
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
 import time
-import requests
-from bs4 import BeautifulSoup
 
-options = webdriver.ChromeOptions()
-options.add_argument('--log-level=3')  # 不添加會有奇怪抱錯
-browser = webdriver.Chrome(chrome_options=options)
-browser.implicitly_wait(3)
-url = "https://cheapsslsecurity.com/quicklogin.html?isauth=false&ReturnUrl=%2fclient%2forderdtl.html%3forderdetailid%3d443556%26isdownload%3dtrue&orderdetailid=443557&isdownload=true"
-browser.get(url)
+# 设置Microsoft Edge Driver的路径
+edge_driver_path = 'G:\GitHub\learn\selenium\webDrive\edgedriver_win32\msedgedriver.exe'
 
+# 创建Microsoft Edge浏览器实例
+driver = webdriver.Edge(executable_path=edge_driver_path)
 
-# try:
-#     element = WebDriverWait(browser, 60).until(
-#         EC.visibility_of_element_located((By.CLASS_NAME, find)))
-#     print('yes')
-# except:
-#     print('沒找到')
+# 打开Google登录页面
+driver.get('https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Fdevelopers.google.com%2Foauthplayground&prompt=consent&response_type=code&client_id=407408718192.apps.googleusercontent.com&scope=email&access_type=offline&flowName=GeneralOAuthFlow')
 
+# 输入用户名
+username = driver.find_element_by_name('identifier')
+username.send_keys('rgps45021@gmail.com')
+username.send_keys(Keys.RETURN)
+time.sleep(2)
+
+# 输入密码
+password = driver.find_element_by_name('password')
+password.send_keys('tim62712tim62712')
+password.send_keys(Keys.RETURN)
+time.sleep(5)
+
+# 检查是否成功登录
 try:
-    browser.find_element_by_name(
-        "ctl00$RapidSSLContent$txtUsername").send_keys("moon.cake988@gmail.com")
-    time.sleep(1)
-    browser.find_element_by_id("txtPassword").send_keys(
-        "r9DgQ7HEKezbpct")
-    time.sleep(1)
-    browser.find_element_by_xpath('//*[(@id = "btnLogin")]').click()
+    profile_button = driver.find_element_by_css_selector(
+        '#gb > div.gb_Ud.gb_0d.gb_wd > div.gb_Vd.gb_0d.gb_wd.gb_xd.gb_4d.gb_6d.gb_Ad.gb_Fd > div.gb_Cd.gb_0d.gb_wd.gb_xd > div.gb_Md.gb_Pf.gb_0d.gb_wd')
+    print("Login successful!")
+except:
+    print("Login failed.")
 
-
-finally:
-    txt = browser.page_source
-    # browser.quit()
+# 关闭浏览器
+driver.quit()
