@@ -7,3 +7,4 @@ python -m playwright codegen --target python -o web.py -b chromium https://www.b
 
 -o 輸出文件名.py
 -b chromium 開啟的網址
+
