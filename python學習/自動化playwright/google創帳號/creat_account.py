@@ -104,7 +104,7 @@ def get_phone_code(token, orderID):
 
 with sync_playwright() as playwright:
     # 设置浏览器选项
-    server = '213.247.123.57:3128'
+    server = '45.119.82.101:3333'
     browser = playwright.firefox.launch(headless=False, proxy={
         'server': f'http://{server}'})
     # browser = playwright.firefox.launch(headless=False)
