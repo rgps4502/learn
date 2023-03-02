@@ -1,7 +1,7 @@
 from playwright.sync_api import Playwright, sync_playwright
 import time
 import sys
-import re
+from 驗證email import verify_google
 import random
 import requests
 import string
@@ -104,10 +104,13 @@ def get_phone_code(token, orderID):
 
 with sync_playwright() as playwright:
     # 设置浏览器选项
+    server = '213.247.123.57:3128'
     browser = playwright.firefox.launch(headless=False, proxy={
-        'server': 'http://5.78.68.101:8080'})
+        'server': f'http://{server}'})
+    # browser = playwright.firefox.launch(headless=False)
     context = browser.new_context(proxy={
-        'server': 'http://5.78.68.101:8080'})
+        'server': f'http://{server}'})
+    # context = browser.new_context()
     # 创建一个新的页面
     page = context.new_page()
     # 访问Google注册页面
@@ -205,6 +208,57 @@ with sync_playwright() as playwright:
 
     with page.expect_navigation():
         page.locator("button:has-text(\"略過\")").click()
+
+    with page.expect_navigation():
+        page.get_by_role("button", name="我同意").click()
+
+    with page.expect_navigation():
+        page.get_by_role("link", name="Security", exact=True).click()
+
+    with page.expect_navigation():
+        page.get_by_role("link", name="Recovery phone").click()
+
+    with page.expect_navigation():
+        page.get_by_role("button", name="Remove phone number").click()
+
+    with page.expect_navigation():
+        page.get_by_role("button", name="Remove number").click()
+
+    with page.expect_navigation():
+        page.get_by_role("button", name="Back").click()
+
+    with page.expect_navigation():
+        page.get_by_role("link", name="Recovery email", exact=True).click()
+
+    with page.expect_navigation():
+        page.get_by_role("button", name="Next").click()
+
+    # 獲取google驗證碼
+    google_code = verify_google(bak_account)
+
+    page.get_by_label("Verification code").click()
+    page.get_by_label("Verification code").fill(google_code)
+    time.sleep(3)
+    page.get_by_role("button", name="Verify").click()
+
+    time.sleep(2)
+    with page.expect_navigation():
+        page.get_by_role(
+            "button", name=f"Google 帳戶： {first_name+second_name} ({account}@gmail.com)").click()
+
+    with page.expect_navigation():
+        page.frame_locator("iframe[name=\"account\"]").get_by_role(
+            "link", name="登出").click()
+
+    with page.expect_navigation():
+        page.get_by_role("link", name="移除帳戶").click()
+
+    with page.expect_navigation():
+        page.get_by_role(
+            "link", name=f"{first_name+second_name} {account}@gmail.com").click()
+
+    with page.expect_navigation():
+        page.get_by_role("button", name="是，我要移除").click()
 
     time.sleep(9999)
     # 创建账户完成后，做其他操作

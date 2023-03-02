@@ -21,7 +21,7 @@ def get_proxy_list() -> List[str]:
                 "https://www.google.com", proxies={"https": proxy}, timeout=5)
             if response.status_code == 200:
                 proxy_list.append(proxy)
-            if len(proxy_list) >= 10:
+            if len(proxy_list) >= 3:
                 break
         except:
             pass
