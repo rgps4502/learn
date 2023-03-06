@@ -75,6 +75,17 @@ def release_phone_number(token, orderID):
     print(res['msg'])
 
 
+# 拉黑手機號
+def deny_phone(token, orderID):
+    params = {
+        'api_token': token,
+        'orderid': orderID
+    }
+    url = 'https://smsn.szfang.tw/api/shieldNumber??'
+    res = requests.get(url, headers=headers, params=params).json()
+    print(res['msg'])
+
+
 # 獲取驗證碼
 
 
@@ -105,12 +116,12 @@ def get_phone_code(token, orderID):
 with sync_playwright() as playwright:
     # 设置浏览器选项
     server = '45.119.82.101:3333'
-    browser = playwright.firefox.launch(headless=False, proxy={
-        'server': f'http://{server}'})
-    # browser = playwright.firefox.launch(headless=False)
-    context = browser.new_context(proxy={
-        'server': f'http://{server}'})
-    # context = browser.new_context()
+    # browser = playwright.firefox.launch(headless=False, proxy={
+    #     'server': f'http://{server}'})
+    browser = playwright.firefox.launch(headless=False)
+    # context = browser.new_context(proxy={
+    #     'server': f'http://{server}'})
+    context = browser.new_context()
     # 创建一个新的页面
     page = context.new_page()
     # 访问Google注册页面
@@ -142,22 +153,53 @@ with sync_playwright() as playwright:
     page.fill('input[name="ConfirmPasswd"]', password)
     # 点击下一步按钮
     page.click('#accountDetailsNext')
+
     # 等待创建账户完成
     page.wait_for_selector('#view_container')
+    time.sleep(1)
+
+    # 判斷google創建是否達到上限
+    try:
+        a = page.locator(
+            '#headingText > span').text_content().replace(' ', '')
+        if '無法建立Google帳戶' == a:
+            browser.close()
+            sys.exit('Google帳戶創建已到上限')
+    except Exception:
+        pass
 
     # 獲取號碼
     token = get_token()
     phone_number, orderid = get_phone_number(token)
     # 填写电话号码
     page.fill('#phoneNumberId', phone_number)
+    # page.fill('#phoneNumberId', '+85265450620')
     # 点击下一步按钮
-    with page.expect_navigation():
+    a = 0
+    while (a < 3):
         page.get_by_role("button", name="繼續").click()
+        try:
+            a = page.locator(
+                'div.o6cuMc.Jj6Lae').text_content().replace(' ', '')
+            if a == '這組電話號碼無法用於驗證身分。':
+                print('這組電話號碼無法用於驗證身分')
+                deny_phone(token, orderid)
+                # 等待 3 到 5 秒
+                time.sleep(random.randint(3, 5))
+                token = get_token()
+                phone_number, orderid = get_phone_number(token)
+                # 填写电话号码
+                page.fill('#phoneNumberId', phone_number)
+                a = a+1
+                if a == 3:
+                    print('google限制今日無法再創帳號')
+        except:
+            break
 
     code = get_phone_code(token, orderid)
     print('獲取到的驗證碼:', code)
 
-    # Fill [aria-label="輸入驗證碼"]
+    # # Fill [aria-label="輸入驗證碼"]
     page.locator("[aria-label=\"輸入驗證碼\"]").fill(code)
 
     with page.expect_navigation():
