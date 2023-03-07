@@ -162,12 +162,11 @@ with sync_playwright() as playwright:
     try:
         a = page.locator(
             '#headingText > span').text_content().replace(' ', '')
-        if '無法建立Google帳戶' == a:
-            browser.close()
-            sys.exit('Google帳戶創建已到上限')
     except Exception:
         pass
-
+    if '無法建立Google帳戶' == a:
+        browser.close()
+        sys.exit('Google帳戶創建已到上限')
     # 獲取號碼
     token = get_token()
     phone_number, orderid = get_phone_number(token)
@@ -175,8 +174,9 @@ with sync_playwright() as playwright:
     page.fill('#phoneNumberId', phone_number)
     # page.fill('#phoneNumberId', '+85265450620')
     # 点击下一步按钮
-    a = 0
-    while (a < 3):
+    time.sleep(random.randint(3, 5))
+    count = 1
+    while (count <= 3):
         page.get_by_role("button", name="繼續").click()
         try:
             a = page.locator(
@@ -186,15 +186,14 @@ with sync_playwright() as playwright:
                 deny_phone(token, orderid)
                 # 等待 3 到 5 秒
                 time.sleep(random.randint(3, 5))
-                token = get_token()
                 phone_number, orderid = get_phone_number(token)
                 # 填写电话号码
                 page.fill('#phoneNumberId', phone_number)
-                a = a+1
-                if a == 3:
-                    print('google限制今日無法再創帳號')
+                count = count+1
         except:
             break
+        if count == 3:
+            sys.exit('google限制今日無法再創帳號')
 
     code = get_phone_code(token, orderid)
     print('獲取到的驗證碼:', code)
