@@ -162,11 +162,12 @@ with sync_playwright() as playwright:
     try:
         a = page.locator(
             '#headingText > span').text_content().replace(' ', '')
+        if '無法建立Google帳戶' == a:
+            browser.close()
+            sys.exit('Google帳戶創建已到上限')
     except Exception:
         pass
-    if '無法建立Google帳戶' == a:
-        browser.close()
-        sys.exit('Google帳戶創建已到上限')
+
     # 獲取號碼
     token = get_token()
     phone_number, orderid = get_phone_number(token)
@@ -175,9 +176,10 @@ with sync_playwright() as playwright:
     # page.fill('#phoneNumberId', '+85265450620')
     # 点击下一步按钮
     time.sleep(random.randint(3, 5))
-    count = 1
+    count = 0
     while (count <= 3):
         page.get_by_role("button", name="繼續").click()
+        time.sleep(2)
         try:
             a = page.locator(
                 'div.o6cuMc.Jj6Lae').text_content().replace(' ', '')
