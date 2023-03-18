@@ -1,11 +1,25 @@
 import requests
 import datetime
+import re
 from bs4 import BeautifulSoup
 
 session = requests.session()
 
 
 def verify_google(email):
+    # 獲取yp
+    url = "https://www.yopmail.com/zh/"
+    req = session.get(url)
+    bs = BeautifulSoup(req.text, 'html.parser')
+    yp = bs.find('input', {'name': 'yp', 'id': 'yp'})['value']
+    # 獲取yj
+    url = "https://yopmail.com/ver/7.6/webmail.js"
+    req = session.get(url)
+    YJ_RE = re.compile("value\+\'\&yj\=([0-9a-zA-Z]*)\&v\=\'", re.MULTILINE)
+    bs = BeautifulSoup(req.text, 'html.parser')
+    match = YJ_RE.search(req.text)
+    yj = match.groups()[0]
+
     session.headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.57'
@@ -13,7 +27,7 @@ def verify_google(email):
 
     # 執行 post 請求
     data = {
-        'yp': 'FZwxlBGp4ZmH1Amt2Zwt3ZmV',
+        'yp': yp,
         'login': email
     }
     url = 'https://yopmail.com/zh/'
@@ -30,7 +44,8 @@ def verify_google(email):
             cookies[key] = value
 
     # 執行 get 請求
-    url = f'https://yopmail.com/zh/inbox?login={account}&p=1&d=&ctrl=&yp=FZwxlBGp4ZmH1Amt2Zwt3ZmV&yj=RAQxlZmx0BQx4ZGZmZGx5ZQR&v=7.0&r_c=&id='
+    url = f'https://yopmail.com/zh/inbox?login={account}&p=1&d=&ctrl=&yp={yp}&yj={yj}&v=7.6&r_c=&id='
+
     res = session.get(url, cookies=cookies)
 
     # 使用BeautifulSoup解析HTML
@@ -64,5 +79,5 @@ def verify_google(email):
 
 
 if __name__ == '__main__':
-    email = 'tgy4qNC101@yopmail.com'
+    email = 'CUrk8Qfyd@yopmail.com'
     verify_google(email)

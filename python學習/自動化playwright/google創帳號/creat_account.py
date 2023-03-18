@@ -183,16 +183,18 @@ with sync_playwright() as playwright:
         try:
             a = page.locator(
                 'div.o6cuMc.Jj6Lae').text_content().replace(' ', '')
-            if a == '這組電話號碼無法用於驗證身分。':
-                print('這組電話號碼無法用於驗證身分')
-                deny_phone(token, orderid)
-                # 等待 3 到 5 秒
-                time.sleep(random.randint(3, 5))
-                phone_number, orderid = get_phone_number(token)
-                # 填写电话号码
-                page.fill('#phoneNumberId', phone_number)
-                count = count+1
         except:
+            break
+        if a in ['這組電話號碼無法用於驗證身分。', '這組電話號碼用過太多次']:
+            print('這組電話號碼無法用於驗證身分或這組電話號碼用過太多次')
+            deny_phone(token, orderid)
+            # 等待 3 到 5 秒
+            time.sleep(random.randint(3, 5))
+            phone_number, orderid = get_phone_number(token)
+            # 填写电话号码
+            page.fill('#phoneNumberId', phone_number)
+            count = count+1
+        else:
             break
         if count == 3:
             sys.exit('google限制今日無法再創帳號')
@@ -259,7 +261,7 @@ with sync_playwright() as playwright:
         page.get_by_role("link", name="Security", exact=True).click()
 
     with page.expect_navigation():
-        page.get_by_role("link", name="Recovery phone").click()
+        page.get_by_role("link", name="Recovery phone", exact=True).click()
 
     with page.expect_navigation():
         page.get_by_role("button", name="Remove phone number").click()
@@ -271,18 +273,18 @@ with sync_playwright() as playwright:
         page.get_by_role("button", name="Back").click()
 
     with page.expect_navigation():
-        page.get_by_role("link", name="Recovery email", exact=True).click()
+        page.get_by_role("link", name="備援電子郵件", exact=True).click()
 
     with page.expect_navigation():
-        page.get_by_role("button", name="Next").click()
+        page.get_by_role("button", name="下一步").click()
 
     # 獲取google驗證碼
     google_code = verify_google(bak_account)
 
-    page.get_by_label("Verification code").click()
-    page.get_by_label("Verification code").fill(google_code)
+    page.get_by_label("驗證碼").click()
+    page.get_by_label("驗證碼").fill(google_code)
     time.sleep(3)
-    page.get_by_role("button", name="Verify").click()
+    page.get_by_role("button", name="驗證", exact=True).click()
 
     time.sleep(2)
     with page.expect_navigation():
