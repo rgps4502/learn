@@ -52,7 +52,7 @@ function pvp()
             reflush:existsClick('reflush.png', 0)
         elseif not pvp1:exists('pvp1.png', 0) then
             click(Location(1061, 514))
-            if pvpAuto2:exists('pvpAuto2.png', 60) then
+            if pvpAuto2:exists('pvpAuto2.png', 600) then
                 sleep(1)
                 click(Location(236, 675))
             end
