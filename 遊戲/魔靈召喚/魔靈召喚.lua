@@ -1,7 +1,7 @@
 -- ========== Settings ================
 Settings:setCompareDimension(true, 1280) --模擬器寬
 Settings:setScriptDimension(true, 1280)
-Settings:set('MinSimilarity', 0.8) --圖片精準度
+Settings:set('MinSimilarity', 0.75) --圖片精準度
 
 -- =========區域=======
 -- Region:highlight() -- 讓紅色框框出現 ex: night:highlight() 再調用一次消失
@@ -16,6 +16,8 @@ pvpNotirck = Region(696, 240, 62, 35)
 network_err = Region(468, 256, 98, 38)
 network_err2 = Region(491, 281, 88, 35)
 reflush = Region(930, 159, 53, 27)
+buy_pvp_ticket = Region(577, 260, 121, 32)
+reflush_pvp = Region(540, 250, 198, 32)
 -- 網路斷線
 function network()
     if network_err:exists('network_err.png', 0) then
@@ -42,18 +44,46 @@ function swip_down()
     manualTouch(actionList)
 end
 
-function pvp()
-    find_pvp:existsClick('find_pvp.png', 1)
-    if pvp1:exists('pvp1.png', 1) then
-        pvp1:existsClick('pvp1.png', 1)
+-- 買pvp票券
+function buy_pvp()
+    sleep(0.8)
+    click(Location(535, 446))
+    sleep(0.8)
+    click(Location(201, 363))
+    sleep(0.8)
+    click(Location(521, 442))
+    if buy_pvp_ticket:exists('buy_pvp_ticket.png', 30) then
+        sleep(0.8)
+        click(Location(607, 446))
+    end
+    sleep(0.8)
+    click(Location(1202, 83))
+end
+
+function pvp(a)
+    -- find_pvp:existsClick('find_pvp.png', 1)
+    if pvp1:exists('pvp1.png', 2) then
+        pvp1:existsClick('pvp1.png', 0)
         if pvpNotirck:exists('pvpNoTrick.png', 1) then
-            click(Location(952, 201))
-            sleep(600)
-            reflush:existsClick('reflush.png', 0)
+            if a >= 0 then
+                -- exit('已購買' + a - 1 + '次')
+                click(Location(952, 201))
+                sleep(600)
+                reflush:existsClick('reflush.png', 0)
+                if reflush_pvp:exists('reflush_pvp.png', 2) then
+                    sleep(0.4)
+                    click(Location(639, 391))
+                end
+                click(Location(643, 407))
+            else
+                buy_pvp()
+                a = a + 1
+            end
+            return a
         elseif not pvp1:exists('pvp1.png', 0) then
             click(Location(1061, 514))
             if pvpAuto2:exists('pvpAuto2.png', 600) then
-                sleep(1)
+                sleep(1.5)
                 click(Location(236, 675))
             end
             -- 等待戰鬥結束
@@ -66,10 +96,12 @@ function pvp()
     else
         swip_down()
     end
+    return a
 end
 
+a = 0
 while (true) do
-    pvp()
+    a = pvp(a)
 end
 -- 找圖+xy方法
 -- match = pvp1:find('pvp1.png')
