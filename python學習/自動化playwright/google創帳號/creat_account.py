@@ -36,7 +36,7 @@ def get_token():
 def get_phone_message(api_token):
     params = {
         'api_token': api_token,
-        'projectId': 19
+        'projectId': 196
     }
     url = 'https://smsn.szfang.tw/api/getNumber'
     try:
@@ -272,19 +272,19 @@ with sync_playwright() as playwright:
     with page.expect_navigation():
         page.get_by_role("button", name="Back").click()
 
-    with page.expect_navigation():
-        page.get_by_role("link", name="備援電子郵件", exact=True).click()
+    # with page.expect_navigation():
+    #     page.get_by_role("link", name="備援電子郵件", exact=True).click()
 
-    with page.expect_navigation():
-        page.get_by_role("button", name="下一步").click()
+    # with page.expect_navigation():
+    #     page.get_by_role("button", name="下一步").click()
 
-    # 獲取google驗證碼
-    google_code = verify_google(bak_account)
-
-    page.get_by_label("驗證碼").click()
-    page.get_by_label("驗證碼").fill(google_code)
-    time.sleep(3)
-    page.get_by_role("button", name="驗證", exact=True).click()
+    # # 獲取google驗證碼
+    # google_code = verify_google(bak_account)
+    # print(google_code)
+    # page.get_by_label("驗證碼").click()
+    # page.get_by_label("驗證碼").fill(google_code)
+    # time.sleep(3)
+    # page.get_by_role("button", name="驗證", exact=True).click()
 
     time.sleep(2)
     with page.expect_navigation():

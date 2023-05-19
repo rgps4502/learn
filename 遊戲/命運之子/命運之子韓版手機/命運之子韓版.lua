@@ -64,7 +64,8 @@ redier_fight = Region(896, 1285, 135, 65)
 redier_kill_mode = Region(851, 552, 200, 55)
 redier_kill_level30 = Region(27, 582, 150, 900)
 redier_wait_level30 = Region(88, 512, 112, 50)
-
+redier_no_ticket = Region(179, 1020, 710, 165)
+redier_time_out = Region(262, 1055, 525, 83)
 --打好友
 friend_pk = Region(69, 330, 160, 80)
 pk = Region(769, 580, 110, 1110) --開始PK
@@ -406,14 +407,19 @@ function redier_f() --打redier
                             repeat
                                 fight_redier:existsClick('fight_redier.png', 0)
                             until not fight_redier:exists('fight_redier.png', 0) or
-                                pvp_no_ticket:exists('no_ticket.png', 0)
+                                redier_no_ticket:exists('no_redier_ticket.png', 0) or
+                                redier_time_out:exists('redier_time_out.png', 0)
                         end
                         repeat
                             sleep(4)
                         until redier_die:exists('redier_die.png', 0) or redier_kill:exists('redier_kill.png', 0) or
-                            pvp_no_ticket:exists('no_ticket.png', 0) --等待打完 點球回主畫面
+                            pvp_no_ticket:exists('no_ticket.png', 0) or
+                            redier_time_out:exists('redier_time_out.png', 0) --等待打完 點球回主畫面
                     end
-                    if redier_die:exists('redier_die.png', 0) or redier_kill:exists('redier_kill.png', 0) then
+                    if redier_time_out:exists('redier_time_out.png', 0) then
+                        pvp_no_ticket:existsClick('no_ticket.png', 3)
+                        break
+                    elseif redier_die:exists('redier_die.png', 0) or redier_kill:exists('redier_kill.png', 0) then
                         sleep(2)
                         redier_kill:existsClick('redier_kill.png', 2)
                         redier_die:existsClick('redier_die.png', 2)
@@ -428,7 +434,7 @@ function redier_f() --打redier
                             pvp_no_ticket:existsClick('no_ticket.png', 10)
                             sleep(3)
                         end
-                    elseif pvp_no_ticket:exists('no_ticket.png', 0) then --如果沒體力直接離開
+                    elseif redier_no_ticket:exists('no_redier_ticket.png', 0) then --如果沒體力直接離開
                         pvp_no_ticket:existsClick('no_ticket.png', 0)
                         sleep(3)
                         exit:existsClick('exit.png', 0)
@@ -488,9 +494,7 @@ while (true) do
     end
 end
 
--- redier_kill_level30:highlight()
--- if redier_kill_level30:exists('redier_kill_level30.png', 2) then
+-- redier_time_out:exists('redier_time_out.png', 0):highlight()
+-- if redier_time_out:exists('redier_time_out.png', 0) then
 --     print('yes')
--- else
---     print('no')
 -- end

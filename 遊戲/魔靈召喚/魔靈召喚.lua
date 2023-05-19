@@ -62,6 +62,7 @@ end
 
 function pvp(a)
     -- find_pvp:existsClick('find_pvp.png', 1)
+    sleep(1)
     if pvp1:exists('pvp1.png', 2) then
         pvp1:existsClick('pvp1.png', 0)
         if pvpNotirck:exists('pvpNoTrick.png', 1) then
