@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    # image FROM
+    
+    restart: always
+
+    volumes:
+        - mysql-data:/var/lib/mysql
+    # 帶入-v flag的路徑
+    environment:
+        MYSQL_ROOT_PASSWORD: pwd
+        MYSQL_DATABASE: django_db
+    # 帶入-e flag的內容
+
+volumes:
+# 在這邊指定的volumes會提供給全部的services
+    mysql-data:

@@ -1,0 +1,16 @@
+sudo yum install docker -y
+
+執行docker ps 不用加sudo
+
+sudo groupadd docker
+sudo gpasswd -a ${USER} docker
+sudo systemctl start docker
+sudo chmod a+rw /var/run/docker.sock
+
+
+
+在Linux系统上安装docker-Compose
+參考網址https://docs.docker.com.zh.xy2401.com/compose/install/
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose;sudo chmod +x /usr/local/bin/docker-compose
+
+docker-compose --version
