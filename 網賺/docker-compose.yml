@@ -1,0 +1,67 @@
+version: "3.3"
+
+services:
+  honeygain:
+    image: honeygain/honeygain
+    # image FROM
+    restart: ${RESTART_POLICY}
+    # volumes:
+    #     - mysql-data:/var/lib/mysql
+    # 帶入-v flag的路徑
+    command: ${honeygain_command}
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+    # 帶入-e flag的內容
+  traffmonetizer:
+    image: traffmonetizer/cli
+    restart: ${RESTART_POLICY}
+    command: ${traffmonetizer_command}
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+  iproyal01:
+    image: iproyal/pawns-cli:latest
+    restart: ${RESTART_POLICY}
+    command: ${iproyal01_command}
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+  earnapp1:
+    image: fazalfarhan01/earnapp
+    restart: ${RESTART_POLICY}
+    privileged: true
+    volumes: 
+        - ${PWD}/earnapp-data1:/etc/earnapp
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+  earnapp2:
+    image: fazalfarhan01/earnapp
+    restart: ${RESTART_POLICY}
+    privileged: true
+    volumes:
+        - ${PWD}/earnapp-data2:/etc/earnapp
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+# volumes:
+# # 在這邊指定的volumes會提供給全部的services
+#     mysql-data:
