@@ -1,0 +1,2 @@
+# 如果要使用mysql需要安裝
+pip install mysqlclient

@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  mysql:
+    image: mysql:5.7
+    # image FROM
+    
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+        - ${PWD}/mysql_data:/var/lib/mysql
+    # 帶入-v flag的路徑
+    environment:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+    # 給予容器将以特权模式运行
+    privileged: true
+    # 帶入-e flag的內容
+    command: ${command}
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: '3'
+
+# volumes:
+# # 在這邊指定的volumes會提供給全部的services
+#     mysql-data:
+
+

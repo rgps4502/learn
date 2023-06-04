@@ -23,3 +23,7 @@ python manage.py migrate
 DIRS': [BASE_DIR / 'templates'],
 # 最下面語言修改為繁體中文
 LANGUAGE_CODE = 'zh-hant'
+
+
+
+
