@@ -1,4 +1,0 @@
-CharField  字符串
-DateTimeField  日期時間字段
-TextField  文本
-Biglntegerfield  64位整數
