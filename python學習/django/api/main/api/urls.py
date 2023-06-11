@@ -18,5 +18,6 @@ from django.urls import path
 from .views import *
 urlpatterns = [
     path('', view=get_home_page,name="home_page"),
-    path('api/v1/create',view=create_account,name='創建帳號')
+    path('api/v1/create',view=create_account,name='創建帳號'),
+    path('api/v1/delete',view=delete_account,name='刪除帳號')
 ]
