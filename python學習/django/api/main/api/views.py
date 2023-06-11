@@ -13,6 +13,10 @@ def get_home_page(requests):
     return HttpResponse('Hello')
 
 def create_account(reuests):
+    '''
+    將gmail帳號寫入數據庫
+    必須參數 account  比如 /api/v1/create?account=test@gmail.com
+    '''
     email = reuests.GET.get('account',None)
     if not email:
         return HttpResponse("缺少必要的參數 account")
@@ -31,6 +35,11 @@ def create_account(reuests):
     
 
 def delete_account(request):
+    '''
+    將gmail帳號從數據庫刪除
+    必須參數 account  比如 api/v1/delete?account=test@gmail.com
+    '''
+
     # 從 POST 參數中獲取 email
     email = request.GET.get('account', None)
     if not email:
