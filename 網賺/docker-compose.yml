@@ -4,6 +4,7 @@ services:
   honeygain:
     image: honeygain/honeygain
     # image FROM
+    container_name: honeygain
     restart: ${RESTART_POLICY}
     # volumes:
     #     - mysql-data:/var/lib/mysql
@@ -21,6 +22,7 @@ services:
     # 帶入-e flag的內容
   traffmonetizer:
     image: traffmonetizer/cli
+    container_name: traffmonetizer
     restart: ${RESTART_POLICY}
     command: ${traffmonetizer_command}
     logging:
@@ -31,6 +33,7 @@ services:
 
   iproyal01:
     image: iproyal/pawns-cli:latest
+    container_name: iproyal
     restart: ${RESTART_POLICY}
     command: ${iproyal01_command}
     logging:
@@ -41,6 +44,7 @@ services:
 
   earnapp1:
     image: fazalfarhan01/earnapp
+    container_name: earnapp
     restart: ${RESTART_POLICY}
     privileged: true
     volumes: 
@@ -54,6 +58,7 @@ services:
 
   earnapp2:
     image: fazalfarhan01/earnapp
+    container_name: earnapp2
     restart: ${RESTART_POLICY}
     privileged: true
     volumes:
@@ -64,6 +69,9 @@ services:
       options:
         max-size: 10m
         max-file: '3'
+
+
+
 
 # volumes:
 # # 在這邊指定的volumes會提供給全部的services
