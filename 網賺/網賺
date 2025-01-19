@@ -41,14 +41,7 @@ Tim X2
 
 =====================================================
 
-https://dashboard.peer2profit.app
-rgps45021@gmail.com
-Tim62712tim62712
-docker run -itd --dns 8.8.8.8 --dns 1.1.1.1 --dns 9.9.9.9 --name peer2profit --restart unless-stopped  -e P2P_EMAIL=rgps45021@gmail.com  peer2profit/peer2profit_linux:latest 
 
-多開
-wget -q https://bit.ly/peer2fly -O peer2fly.sh
-bash peer2fly.sh --email rgps45021@gmail.com --number 3
 ==========================================================
 
 https://earnapp.com/dashboard
@@ -66,10 +59,4 @@ docker exec -it earnapp earnapp showid
 wget -qO- https://brightdata.com/static/earnapp/install.sh > /tmp/earnapp.sh && sudo bash /tmp/earnapp.sh
 yes
 
-=============================================
-https://www.feelingsurf.fr/dashboard
-FeelingSurf
-username rgps4502
-rgps45021@gmail.com
-Tim x2
-docker run -itd --name FeelingSurf --restart unless-stopped -e access_token=52df74fbc57cfeb4e37f7deb51937ed2 --cap-add SYS_ADMIN feelingsurf/viewer:stable
+
