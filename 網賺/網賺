@@ -19,7 +19,7 @@ Traffmonetizer  5/25 2:35
 name : rgps4502
 rgps45021@gmail.com
 Tim X2 2
-docker run -itd --name traffmonetizer --restart unless-stopped traffmonetizer/cli start accept --token db+5PCoHwFfPqo7aK9Ge2xq/gl8LiEZjH46ux+cBiQk=
+docker run -itd --name traffmonetizer --restart unless-stopped traffmonetizer/cli_v2 start accept --token db+5PCoHwFfPqo7aK9Ge2xq/gl8LiEZjH46ux+cBiQk=
 
 ===============================================
 
