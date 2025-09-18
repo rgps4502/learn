@@ -8,7 +8,7 @@ https://dashboard.honeygain.com/
 rgps45021@gmail.com
 tim X2
 小蜜蜂 網賺 5/25  1:00
-docker run -itd --name honeygain --restart unless-stopped honeygain/honeygain -tou-accept -email rgps45021@gmail.com -pass tim62712tim62712 -device honeygain_linux2
+docker run -itd --name honeygain --restart unless-stopped docker.io/honeygain/honeygain:latest -tou-accept -email rgps45021@gmail.com -pass tim62712tim62712 -device honeygain_linux2
 
 
 
@@ -58,5 +58,6 @@ docker exec -it earnapp earnapp showid
 進到earnapp容器下指令 綁定uuid
 wget -qO- https://brightdata.com/static/earnapp/install.sh > /tmp/earnapp.sh && sudo bash /tmp/earnapp.sh
 yes
+
 
 
