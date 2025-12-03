@@ -13,8 +13,8 @@ def get_http(url):
         'formhash': '385ead7e',
         'referer': 'https://myself-bbs.com/portal.php',
         'loginfield': 'username',
-        'username': 'rgps4502',
-        'password': 'tim62712',
+        'username': 'account',
+        'password': 'pawssord',
         'questionid': '0',
 
     }
